@@ -14,7 +14,8 @@ const filterNotChineseChar = (str: string) => {
     .join("");
 };
 
-const text = filterNotChineseChar(decodeURIComponent(route.query.text));
+const queryText = route.query.text
+const text = filterNotChineseChar(decodeURIComponent(queryText as string));
 const textList = text.split("").filter((s) => !!s && regex.test(s))
 const router = useRouter();
 

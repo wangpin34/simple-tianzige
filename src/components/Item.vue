@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { computed, ref } from "vue"
 import TianZiGe from "./TianZiGe.vue"
+import { savePNG } from "../utils/image"
 import { showToast } from "vant"
 import { itemsStore } from "../store/index"
 import { useRoute } from "vue-router"
-import QrCode from "./QrCode.vue"
 import Edit from './Edit.vue'
 
 const route = useRoute()
@@ -32,7 +32,6 @@ const onCancelSave = () => {
   showEdit.value = false
 }
 
-
 enum ShareOption {
   CopyLink = "复制链接",
   ShareImage = "分享图片",
@@ -45,11 +44,14 @@ const options = [
   { name: "二维码", icon: "qrcode", type: ShareOption.QRCode },
 ];
 
-const onSelect = (option: { name: string; type: ShareOption }) => {
+const onSelect = async (option: { name: string; type: ShareOption }) => {
   switch (option.type) {
     case ShareOption.CopyLink:
-      navigator.clipboard.writeText(shareLink.value);
+      await navigator.clipboard.writeText(shareLink.value);
       showToast("复制成功");
+      break;
+    case ShareOption.ShareImage:
+      await saveTianZiGeImage()
       break;
     case ShareOption.QRCode:
       showQr.value = true;
@@ -57,11 +59,33 @@ const onSelect = (option: { name: string; type: ShareOption }) => {
   }
   showShare.value = false;
 };
+
+const saveTianZiGeImage = async () => {
+  const tianZiGeElement = document.querySelector("#tianzige");
+  if (tianZiGeElement) {
+    await savePNG(tianZiGeElement as HTMLElement, "田字格");
+    showToast("保存成功");
+  } else {
+    showToast("田字格生成失败");
+  }
+};
+
+const saveQrCodeImage = async () => {
+  const qrCodeElement = document.querySelector('qr-code')
+  if (qrCodeElement) {
+    await savePNG(qrCodeElement as HTMLElement, "田字格二维码");
+    showToast("保存成功");
+  } else {
+    showToast("二维码生成失败");
+  }
+  showQr.value = false;
+};
+
 </script>
 
 <template>
   <div id="home" class="h-full max-h-full flex flex-col gap-2">
-    <div class="flex-grow">
+    <div class="flex-grow" id="tianzige">
       <div v-if="textList?.length" class="grid grid-cols-5 gap-2 p-4 rounded-lg shadow-md  shadow-slate-300 bg-white">
         <template v-for="char in textList">
           <TianZiGe :char="char" />
@@ -80,9 +104,10 @@ const onSelect = (option: { name: string; type: ShareOption }) => {
   <van-share-sheet v-model:show="showShare" title="立即分享给好友" :options="options" @select="onSelect" />
   <van-action-sheet v-model:show="showQr">
     <div class="p-8">
-    <div class="content w-36 h-36 m-auto">
+    <div id="qr-code" class="content w-36 h-36 m-auto">
       <qr-code :contents="shareLink"></qr-code>
     </div>
+    <van-button text="保存二维码" @click="saveQrCodeImage" />
     </div>
   </van-action-sheet>
 
