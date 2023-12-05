@@ -11,6 +11,7 @@ const route = useRoute()
 
 const id = route.params.id
 const item = computed(() => itemsStore.value.find(item => item.id === id));
+const shareLink = computed(() => `${window.location.origin}/#/share?text=${encodeURIComponent(item.value?.text ?? '')}`)
 const regex = /[\u4e00-\u9fa5]/;
 const textList = computed(() =>
   item.value?.text.split("").filter((s) => !!s && regex.test(s))
@@ -47,7 +48,7 @@ const options = [
 const onSelect = (option: { name: string; type: ShareOption }) => {
   switch (option.type) {
     case ShareOption.CopyLink:
-      navigator.clipboard.writeText(window.location.href);
+      navigator.clipboard.writeText(shareLink.value);
       showToast("复制成功");
       break;
     case ShareOption.QRCode:
@@ -78,8 +79,10 @@ const onSelect = (option: { name: string; type: ShareOption }) => {
   </van-action-bar>
   <van-share-sheet v-model:show="showShare" title="立即分享给好友" :options="options" @select="onSelect" />
   <van-action-sheet v-model:show="showQr">
-    <div class="content">
-      <qr-code contents="https://bitjson.com"></qr-code>
+    <div class="p-8">
+    <div class="content w-36 h-36 m-auto">
+      <qr-code :contents="shareLink"></qr-code>
+    </div>
     </div>
   </van-action-sheet>
 
