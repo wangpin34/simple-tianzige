@@ -9,7 +9,7 @@ const graphic = computed(() => graphicsStore.value[charCode.value]);
 </script>
 
 <template>
-  <div v-if="!!graphic" :data-char="char" class="w-16 h-16 shrink relative outline-1 outline-slate-300 outline-dashed">
+  <div v-if="!!graphic" :data-char="char" class="aspect-square shrink relative outline-1 outline-slate-300 outline-dashed">
   <svg viewBox="0 0 1024 1024" class="absolute top-0 left-0">
     <g
       stroke="gray"

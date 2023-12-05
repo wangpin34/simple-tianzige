@@ -4,4 +4,10 @@ interface Graphic {
   medians: Array<[number, number]>
 }
 
-export type { Graphic }
+// TianZiGe Item
+interface Item {
+  id: string
+  text: string
+}
+
+export type { Graphic, Item }

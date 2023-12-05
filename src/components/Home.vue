@@ -1,22 +1,25 @@
 <script setup lang="ts">
-import { computed } from 'vue';
-import { textStore } from '../store/index'
-import TianZiGe from './TianZiGe.vue'
-const regex = /[\u4e00-\u9fa5]/
-const text = computed(() => 
-  textStore.value
-)
-const textList = computed(() => text.value.split('').filter((s) => regex.test(s)))
+import { itemsStore } from "../store/index";
+import { useRouter } from "vue-router";
+
+
+const router = useRouter()
+
+const onCreate = () => {
+  router.push('/create')
+}
 
 </script>
 
 <template>
-  <div>
-    <router-link to="/edit">编辑</router-link>
-    <div class="grid grid-cols-5">
-      <template v-for="char in textList">
-        <TianZiGe :char="char"/>
-      </template>
+  <div id="home" class="h-full max-h-full flex flex-col gap-2">
+    <div class="flex-grow">
+      <div class="flex gap-4 flex-wrap">
+        <template v-for="item in itemsStore.value">
+          <router-link :to="`/items/${item.id}`" class="bg-white rounded-lg p-4">{{item.text.slice(0, 6)}}</router-link>
+        </template>
+        <van-floating-bubble icon="plus" @click="onCreate"/>
+      </div>
     </div>
   </div>
 </template>
