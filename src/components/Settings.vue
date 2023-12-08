@@ -1,30 +1,45 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { ref } from "vue";
 import { useRouter } from "vue-router";
-const text = ref<string>('')
-const isValid = computed(() => !!text.value)
-const router = useRouter();
+import { settingsStore } from "../store/settings";
+import { showToast } from "vant";
 
-const onBack = () => {
-  router.push('/')
+const colsNum = ref(settingsStore.value.tianzige.colsNum);
+
+const onChange = (value: number) => {
+  colsNum.value = value;
+};
+
+const onSave = () => {
+  settingsStore.value.tianzige.colsNum = colsNum.value;
+  showToast('保存成功')
 }
-
 </script>
 
 <template>
   <van-nav-bar title="设置">
-    <template #left>
-      <van-icon name="arrow-left" size="18" @click="onBack" />
-    </template>
-   
+    
+    <template #right>
+        <span @click="onSave">完成</span>
+      </template>
   </van-nav-bar>
-  <van-cell-group class="m-8 bg-white p-4 rounded-lg">
-    <van-row>
-      <van-field v-model="text" type="textarea" placeholder="输入文字" :rules="[{ required: true }]"
-        :error-message="`${!isValid ? '请输入文字' : ''}`" size="large" clearable autofocus autosize maxlength="100"
-        show-word-limit />
-    </van-row>
-  </van-cell-group>
+  <div class="m-8">
+    <div class="bg-white px-4 pt-2 pb-8 rounded-lg">
+      <h1 class="text-lg leading-normal">田字格排版</h1>
+      <div class="flex flex-col gap-4">
+        <label class="text-md leading-tight">每行格数({{ colsNum }})</label>
+        <van-slider
+          v-model="colsNum"
+          :min="1"
+          :max="10"
+          :step="1"
+          @change="onChange"
+          
+        />
+      </div>
+    </div>
+    
+  </div>
 </template>
 
 <style scoped></style>

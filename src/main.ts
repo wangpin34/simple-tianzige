@@ -18,7 +18,8 @@ import {
   Toast,
   Icon,
   ActionSheet,
-  Tabbar, TabbarItem
+  Tabbar, TabbarItem,
+  Slider 
 } from "vant";
 import Settings from 'components/Settings.vue'
 import Create from "components/Create.vue";
@@ -61,6 +62,7 @@ app.use(FloatingBubble);
 app.use(Tabbar);
 app.use(TabbarItem);
 app.use(Icon);
+app.use(Slider);
 
 app.use(router);
 

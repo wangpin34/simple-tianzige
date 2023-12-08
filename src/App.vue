@@ -55,7 +55,7 @@ watch(
     <router-view></router-view>
     <van-tabbar v-model="activeTab">
       <van-tabbar-item icon="orders-o">字帖</van-tabbar-item>
-      <van-tabbar-item icon="setting-o">设置(WIP)</van-tabbar-item>
+      <van-tabbar-item icon="setting-o">设置</van-tabbar-item>
     </van-tabbar>
   </div>
 </template>

@@ -4,11 +4,19 @@ import TianZiGe from "./TianZiGe.vue"
 import { savePNG } from "../utils/image"
 import { showToast } from "vant"
 import { itemsStore } from "../store/index"
+import { settingsStore } from "../store/settings"
 import { useRoute, useRouter } from "vue-router"
 import Edit from './Edit.vue'
+import { watch } from "vue"
 
 const route = useRoute()
 const router = useRouter()
+
+const colsNum = ref(settingsStore.value.tianzige.colsNum)
+
+watch(settingsStore, () => {
+  colsNum.value = settingsStore.value.tianzige.colsNum
+})
 
 const id = route.params.id
 const item = computed(() => itemsStore.value.find(item => item.id === id));
@@ -100,7 +108,7 @@ const saveQrCodeImage = async () => {
 
   <div id="home" class="p-8 grow flex flex-col gap-2">
     <div class="flex-grow" id="tianzige">
-      <div v-if="textList?.length" class="grid grid-cols-5 gap-2 p-4 rounded-lg shadow-md  shadow-slate-300 bg-white">
+      <div v-if="textList?.length"  class="grid gap-2 p-4 rounded-lg shadow-md shadow-slate-300 bg-white" :style="`grid-template-columns:repeat(${settingsStore.value.tianzige.colsNum},1fr)`">
         <template v-for="char in textList">
           <TianZiGe :char="char" />
         </template>
