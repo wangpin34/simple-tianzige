@@ -20,6 +20,7 @@ import {
   ActionSheet,
   Tabbar, TabbarItem
 } from "vant";
+import Settings from 'components/Settings.vue'
 import Create from "components/Create.vue";
 import Share from "components/Share.vue";
 import Home from "components/Home.vue";
@@ -30,6 +31,7 @@ import Item from "components/Item.vue";
 const routes = [
   { path: "/", component: Home },
   { path: "/items/:id", component: Item },
+  { path: "/settings", component: Settings },
   { path: "/create", component: Create },
   {
     path: "/share",

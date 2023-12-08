@@ -19,7 +19,7 @@ const textToColor = (text: string) => {
 </script>
 
 <template>
-  <van-nav-bar title="简单田字格">
+  <van-nav-bar title="字帖">
     <template #right>
       <van-icon name="plus" size="18" @click="router.push('/create')" />
     </template>

@@ -2,6 +2,7 @@
 import { nanoid } from "nanoid";
 import TianZiGe from "./TianZiGe.vue"
 import { itemsStore } from "../store/index";
+import { showToast  } from 'vant'
 import { useRouter, useRoute } from "vue-router";
 
 const route = useRoute();
@@ -26,6 +27,7 @@ const onSave = () => {
     text: filterNotChineseChar(text)
   }
   itemsStore.value.push(item)
+  showToast('保存成功')
   router.push('/items/' +
     id);
 }
@@ -37,7 +39,7 @@ const onBack = () => {
 </script>
 
 <template>
-  <van-nav-bar :title="`简单田字格`">
+  <van-nav-bar title="来自分享">
     <template #left >
       <van-icon name="arrow-left" size="18" @click="onBack"/>
     </template>

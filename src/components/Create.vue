@@ -28,7 +28,7 @@ const onBack = () => {
 </script>
 
 <template>
-  <van-nav-bar :title="`简单田字格`">
+  <van-nav-bar title="新建">
     <template #left >
       <van-icon name="arrow-left" size="18" @click="onBack"/>
     </template>
