@@ -30,10 +30,22 @@ const onSave = () => {
     id);
 }
 
+const onBack = () => {
+  router.push('/')
+}
+
 </script>
 
 <template>
-  <div id="home" class="h-full max-h-full flex flex-col gap-2">
+  <van-nav-bar :title="`简单田字格`">
+    <template #left >
+      <van-icon name="arrow-left" size="18" @click="onBack"/>
+    </template>
+    <template #right>
+      <van-icon name="star-o" size="18" @click="onSave"/>
+    </template>
+  </van-nav-bar>
+  <div id="home" class="p-8 grow flex flex-col gap-2">
     <div class="flex-grow">
       <div
         v-if="textList?.length"

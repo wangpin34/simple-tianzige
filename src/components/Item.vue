@@ -4,10 +4,11 @@ import TianZiGe from "./TianZiGe.vue"
 import { savePNG } from "../utils/image"
 import { showToast } from "vant"
 import { itemsStore } from "../store/index"
-import { useRoute } from "vue-router"
+import { useRoute, useRouter } from "vue-router"
 import Edit from './Edit.vue'
 
 const route = useRoute()
+const router = useRouter()
 
 const id = route.params.id
 const item = computed(() => itemsStore.value.find(item => item.id === id));
@@ -20,6 +21,10 @@ const textList = computed(() =>
 const showShare = ref(false);
 const showQr = ref(false);
 const showEdit = ref(false)
+
+const onBack = () => {
+  router.push('/')
+}
 
 const onSave = (text: string) => {
   if (item.value) {
@@ -84,7 +89,16 @@ const saveQrCodeImage = async () => {
 </script>
 
 <template>
-  <div id="home" class="h-full max-h-full flex flex-col gap-2">
+  <van-nav-bar :title="`简单田字格`">
+    <template #left >
+      <van-icon name="arrow-left" size="18" @click="onBack"/>
+    </template>
+    <template #right>
+      <van-icon name="share-o" size="18" @click="showShare = true"/>
+    </template>
+  </van-nav-bar>
+
+  <div id="home" class="p-8 grow flex flex-col gap-2">
     <div class="flex-grow" id="tianzige">
       <div v-if="textList?.length" class="grid grid-cols-5 gap-2 p-4 rounded-lg shadow-md  shadow-slate-300 bg-white">
         <template v-for="char in textList">
@@ -97,10 +111,10 @@ const saveQrCodeImage = async () => {
       </div>
     </div>
   </div>
-  <van-action-bar>
-    <van-action-bar-button type="default" text="编辑" @click="showEdit=true" />
-    <van-action-bar-button type="primary" @click="showShare = true" text="分享" />
-  </van-action-bar>
+
+  <van-button round icon="edit" type="primary" v-if="textList?.length" class="right-4 bottom-16" style="position: fixed;" @click="showEdit = true"/>
+  
+
   <van-share-sheet v-model:show="showShare" title="立即分享给好友" :options="options" @select="onSelect" />
   <van-action-sheet v-model:show="showQr">
     <div class="p-8">
@@ -110,7 +124,7 @@ const saveQrCodeImage = async () => {
     <van-button text="保存二维码" @click="saveQrCodeImage" />
     </div>
   </van-action-sheet>
-
+  
   <van-action-sheet v-if="item" v-model:show="showEdit">
     <div class="content">
       <Edit :text="item.text" :onOK="onSave" :onCancel="onCancelSave" />

@@ -16,7 +16,9 @@ import {
   Row,
   ShareSheet,
   Toast,
+  Icon,
   ActionSheet,
+  Tabbar, TabbarItem
 } from "vant";
 import Create from "components/Create.vue";
 import Share from "components/Share.vue";
@@ -54,6 +56,9 @@ app.use(ShareSheet);
 app.use(Toast);
 app.use(ActionSheet);
 app.use(FloatingBubble);
+app.use(Tabbar);
+app.use(TabbarItem);
+app.use(Icon);
 
 app.use(router);
 

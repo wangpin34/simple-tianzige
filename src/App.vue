@@ -1,23 +1,40 @@
 <script setup lang="ts">
-import { computed, onMounted, watch } from 'vue';
-import { useRoute, useRouter } from 'vue-router'
-import type { Graphic, Item  } from './types/index'
-import { graphicsStore, itemsStore } from './store/index'
+import { computed, onMounted, watch, ref } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import type { Graphic, Item } from "./types/index";
+import { graphicsStore, itemsStore } from "./store/index";
 
-const route = useRoute()
-const router = useRouter()
-const isNotHome = computed(() => route.path !== '/')
+const activeTab = ref(0);
+const route = useRoute();
+const router = useRouter();
+const isNotHome = computed(() => route.path !== "/");
+
+const onCreate = () => {
+  router.push("/create");
+};
 
 const onBack = () => {
-  router.push('/')
-}
+  router.push("/");
+};
+
+watch(activeTab, () => {
+  switch (activeTab.value) {
+    case 0:
+      router.push("/");
+      break;
+    case 1:
+      router.push("/settings");
+      break;
+    default:
+      console.log(`unknown tab(${activeTab.value}) activated`);
+  }
+});
 
 onMounted(() => {
-
-  const cachedItemsVal = localStorage.getItem('items')
+  const cachedItemsVal = localStorage.getItem("items");
   if (cachedItemsVal) {
-    const items = JSON.parse(cachedItemsVal)
-    itemsStore.value = items ?? [] as Item[]
+    const items = JSON.parse(cachedItemsVal);
+    itemsStore.value = items ?? ([] as Item[]);
   }
 
   (async () => {
@@ -30,25 +47,26 @@ onMounted(() => {
         a[c.character.charCodeAt(0)] = c;
         return a;
       }, {} as Record<string, Graphic>);
-  })()
-  
-})
+  })();
+});
 
-watch(itemsStore, () => {
-  localStorage.setItem('items', JSON.stringify(itemsStore.value))
-}, { deep: true })
-
+watch(
+  itemsStore,
+  () => {
+    localStorage.setItem("items", JSON.stringify(itemsStore.value));
+  },
+  { deep: true }
+);
 </script>
 
 <template>
-  <div class="flex flex-col h-screen">
-  <van-nav-bar :title="`简单田字格(${itemsStore.value.length})`" v-bind:left-arrow="isNotHome" v-bind:left-text="`${isNotHome ? '返回' : ''}`"  @click-left="onBack"/>
-  <div class="px-8 grow bg-slate-50">
+  <div class="flex flex-col h-screen bg-slate-50">
     <router-view></router-view>
-  </div>
+    <van-tabbar v-model="activeTab">
+      <van-tabbar-item icon="home-o">书架</van-tabbar-item>
+      <van-tabbar-item icon="setting-o">设置(WIP)</van-tabbar-item>
+    </van-tabbar>
   </div>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

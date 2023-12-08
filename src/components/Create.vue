@@ -20,10 +20,23 @@ const onOK = () => {
   router.push('/items/' + 
   id);
 };
+
+const onBack = () => {
+  router.push('/')
+}
+
 </script>
 
 <template>
-  <van-cell-group class="bg-white px-2 py-4 rounded-lg">
+  <van-nav-bar :title="`简单田字格`">
+    <template #left >
+      <van-icon name="arrow-left" size="18" @click="onBack"/>
+    </template>
+    <template #right>
+      <span @click="onOK">完成</span>
+    </template>
+  </van-nav-bar>
+  <van-cell-group class="m-8 bg-white p-4 rounded-lg">
     <van-row>
       <van-field
         v-model="text"
@@ -35,15 +48,11 @@ const onOK = () => {
         clearable
         autofocus
         autosize
-        maxlength="50"
+        maxlength="100"
         show-word-limit
       />
     </van-row>
   </van-cell-group>
-  <van-action-bar>
-    <van-action-bar-button type="default" text="取消" to="/"/>
-    <van-action-bar-button type="primary" text="完成" @click="onOK" />
-  </van-action-bar>
 </template>
 
 <style scoped></style>

@@ -1,24 +1,42 @@
 <script setup lang="ts">
+import { useRouter } from 'vue-router'
 import { itemsStore } from "../store/index";
-import { useRouter } from "vue-router";
-
 
 const router = useRouter()
 
-const onCreate = () => {
-  router.push('/create')
+const colors = ['#569597', '#7ba1a8', '#f36838', '#ff4777', '#057748', '#574266', '#8d4bbb', '#3d3b4f']
+
+const textToNumber = (text: string, max: number) => {
+  const sum = text.split('').map(t => t.charCodeAt(0)).reduce((a, c) => a + c, 0)
+  return sum % max
+}
+
+const textToColor = (text: string) => {
+  const num = textToNumber(text, colors.length)
+  return colors[num]
 }
 
 </script>
 
 <template>
-  <div id="home" class="h-full max-h-full flex flex-col gap-2">
+  <van-nav-bar title="简单田字格">
+    <template #right>
+      <van-icon name="plus" size="18" @click="router.push('/create')" />
+    </template>
+  </van-nav-bar>
+  <div id="home" class="p-8 grow  max-h-full flex flex-col gap-2">
     <div class="flex-grow">
-      <div class="flex gap-4 flex-wrap">
+      <div class="grid grid-cols-2 gap-4 " >
         <template v-for="item in itemsStore.value">
-          <router-link :to="`/items/${item.id}`" class="bg-white rounded-lg p-4">{{item.text.slice(0, 6)}}</router-link>
+          <router-link :to="`/items/${item.id}`" class="rounded-lg p-4 aspect-square" :style="{ backgroundColor: textToColor(item.text) }">
+            <div>
+              <div class="text-md text-slate-100">
+                {{ item.text }}
+              </div>
+            </div>
+          </router-link>
         </template>
-        <van-floating-bubble icon="plus" @click="onCreate"/>
+        
       </div>
     </div>
   </div>
