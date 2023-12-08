@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import { useRouter } from 'vue-router'
 import { computed, ref } from 'vue'
-const router = useRouter()
 
 const { text, onOK, onCancel } = defineProps<{
   text: string
@@ -15,10 +13,6 @@ const isValid = computed(() => !!inputText.value)
 const regex = /[\u4e00-\u9fa5]/;
 const filterNotChineseChar = (str: string) => {
   return str.split('').filter(s => !!s && regex.test(s)).join('')
-}
-
-const onBack = () => {
-  router.push('/')
 }
 
 

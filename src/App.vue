@@ -1,21 +1,12 @@
 <script setup lang="ts">
-import { computed, onMounted, watch, ref } from "vue";
-import { useRoute, useRouter } from "vue-router";
+import { onMounted, watch, ref } from "vue";
+import { useRouter } from "vue-router";
 import type { Graphic, Item } from "./types/index";
 import { graphicsStore, itemsStore } from "./store/index";
 
 const activeTab = ref(0);
-const route = useRoute();
 const router = useRouter();
-const isNotHome = computed(() => route.path !== "/");
 
-const onCreate = () => {
-  router.push("/create");
-};
-
-const onBack = () => {
-  router.push("/");
-};
 
 watch(activeTab, () => {
   switch (activeTab.value) {
@@ -63,7 +54,7 @@ watch(
   <div class="flex flex-col h-screen bg-slate-50">
     <router-view></router-view>
     <van-tabbar v-model="activeTab">
-      <van-tabbar-item icon="home-o">书架</van-tabbar-item>
+      <van-tabbar-item icon="orders-o">字帖</van-tabbar-item>
       <van-tabbar-item icon="setting-o">设置(WIP)</van-tabbar-item>
     </van-tabbar>
   </div>
