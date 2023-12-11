@@ -1,26 +1,31 @@
 <script setup lang="ts">
-import { computed, ref } from "vue"
-import TianZiGe from "./TianZiGe.vue"
-import { savePNG } from "../utils/image"
-import { showToast } from "vant"
-import { itemsStore } from "../store/index"
-import { settingsStore } from "../store/settings"
-import { useRoute, useRouter } from "vue-router"
-import Edit from './Edit.vue'
-import { watch } from "vue"
+import { computed, ref } from "vue";
+import TianZiGe from "./TianZiGe.vue";
+import { savePNG } from "../utils/image";
+import { showToast } from "vant";
+import { itemsStore } from "../store/index";
+import { settingsStore } from "../store/settings";
+import { useRoute, useRouter } from "vue-router";
+import Edit from "./Edit.vue";
+import { watch } from "vue";
 
-const route = useRoute()
-const router = useRouter()
+const route = useRoute();
+const router = useRouter();
 
-const colsNum = ref(settingsStore.value.tianzige.colsNum)
+const colsNum = ref(settingsStore.value.tianzige.colsNum);
 
 watch(settingsStore, () => {
-  colsNum.value = settingsStore.value.tianzige.colsNum
-})
+  colsNum.value = settingsStore.value.tianzige.colsNum;
+});
 
-const id = route.params.id
-const item = computed(() => itemsStore.value.find(item => item.id === id));
-const shareLink = computed(() => `${window.location.origin}/#/share?text=${encodeURIComponent(item.value?.text ?? '')}`)
+const id = route.params.id;
+const item = computed(() => itemsStore.value.find((item) => item.id === id));
+const shareLink = computed(
+  () =>
+    `${window.location.origin}/#/share?text=${encodeURIComponent(
+      item.value?.text ?? ""
+    )}`
+);
 const regex = /[\u4e00-\u9fa5]/;
 const textList = computed(() =>
   item.value?.text.split("").filter((s) => !!s && regex.test(s))
@@ -28,22 +33,22 @@ const textList = computed(() =>
 
 const showShare = ref(false);
 const showQr = ref(false);
-const showEdit = ref(false)
+const showEdit = ref(false);
 
 const onBack = () => {
-  router.push('/')
-}
+  router.push("/");
+};
 
 const onSave = (text: string) => {
   if (item.value) {
-    item.value.text = text
-    showEdit.value = false
+    item.value.text = text;
+    showEdit.value = false;
   }
-}
+};
 
 const onCancelSave = () => {
-  showEdit.value = false
-}
+  showEdit.value = false;
+};
 
 enum ShareOption {
   CopyLink = "复制链接",
@@ -64,7 +69,7 @@ const onSelect = async (option: { name: string; type: ShareOption }) => {
       showToast("复制成功");
       break;
     case ShareOption.ShareImage:
-      await saveTianZiGeImage()
+      await saveTianZiGeImage();
       break;
     case ShareOption.QRCode:
       showQr.value = true;
@@ -84,7 +89,7 @@ const saveTianZiGeImage = async () => {
 };
 
 const saveQrCodeImage = async () => {
-  const qrCodeElement = document.querySelector('qr-code')
+  const qrCodeElement = document.querySelector("qr-code");
   if (qrCodeElement) {
     await savePNG(qrCodeElement as HTMLElement, "田字格二维码");
     showToast("保存成功");
@@ -93,22 +98,28 @@ const saveQrCodeImage = async () => {
   }
   showQr.value = false;
 };
-
 </script>
 
 <template>
-  <van-nav-bar :title="`${item?.text.slice(0,5)}...`">
-    <template #left >
-      <van-icon name="arrow-left" size="18" @click="onBack"/>
+  <van-nav-bar>
+    <template #left>
+      <van-icon name="arrow-left" size="18" @click="onBack" />
     </template>
     <template #right>
-      <van-icon name="share-o" size="18" @click="showShare = true"/>
+      <div class="flex gap-4">
+        <van-icon name="share-o" size="18" @click="showShare = true" />
+        <van-icon name="edit" size="18" @click="showEdit = true" />
+      </div>
     </template>
   </van-nav-bar>
 
   <div id="home" class="p-8 grow flex flex-col gap-2">
     <div class="flex-grow" id="tianzige">
-      <div v-if="textList?.length"  class="grid gap-2 p-4 rounded-lg shadow-md shadow-slate-300 bg-white" :style="`grid-template-columns:repeat(${settingsStore.value.tianzige.colsNum},1fr)`">
+      <div
+        v-if="textList?.length"
+        class="grid gap-2 p-4 rounded-lg shadow-md shadow-slate-300 bg-white"
+        :style="`grid-template-columns:repeat(${settingsStore.value.tianzige.colsNum},1fr)`"
+      >
         <template v-for="char in textList">
           <TianZiGe :char="char" />
         </template>
@@ -120,21 +131,24 @@ const saveQrCodeImage = async () => {
     </div>
   </div>
 
-  <van-button round icon="edit" type="primary" v-if="textList?.length" class="right-4 bottom-16" style="position: fixed;" @click="showEdit = true"/>
-  
 
-  <van-share-sheet v-model:show="showShare" title="立即分享给好友" :options="options" @select="onSelect" />
+  <van-share-sheet
+    v-model:show="showShare"
+    title="立即分享给好友"
+    :options="options"
+    @select="onSelect"
+  />
   <van-action-sheet v-model:show="showQr">
-    <div class="p-8">
-    <div id="qr-code" class="content w-36 h-36 m-auto">
-      <qr-code :contents="shareLink"></qr-code>
-    </div>
-    <van-button text="保存二维码" @click="saveQrCodeImage" />
+    <div class="p-8 flex flex-col justify-center">
+      <div id="qr-code" class="w-36 h-36 m-auto">
+        <qr-code :contents="shareLink"></qr-code>
+      </div>
+      <van-button text="保存二维码" @click="saveQrCodeImage" />
     </div>
   </van-action-sheet>
-  
+
   <van-action-sheet v-if="item" v-model:show="showEdit">
-    <div class="content">
+    <div>
       <Edit :text="item.text" :onOK="onSave" :onCancel="onCancelSave" />
     </div>
   </van-action-sheet>
