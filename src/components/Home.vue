@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useRouter } from 'vue-router'
+import { useRouter } from 'vue-router';
 import { itemsStore } from "../store/index";
 
 const router = useRouter()
@@ -26,13 +26,11 @@ const textToColor = (text: string) => {
   </van-nav-bar>
   <div id="home" class="p-8 grow  max-h-full flex flex-col gap-2">
     <div class="flex-grow">
-      <div class="grid grid-cols-2 gap-4 " >
+      <div class="grid grid-cols-2 gap-4" >
         <template v-for="item in itemsStore.value">
-          <router-link :to="`/items/${item.id}`" class="rounded-lg p-4 aspect-square" :style="{ backgroundColor: textToColor(item.text) }">
-            <div>
-              <div class="text-md text-slate-100">
-                {{ item.text }}
-              </div>
+          <router-link :to="`/items/${item.id}`" class="rounded-lg p-5 aspect-square " :style="{ backgroundColor: textToColor(item.text) }">
+            <div class="w-full h-full overflow-clip text-md leading-normal text-slate-100">
+              {{ item.text }}
             </div>
           </router-link>
         </template>
