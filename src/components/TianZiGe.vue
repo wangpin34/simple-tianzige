@@ -2,14 +2,14 @@
 import { computed } from "vue";
 import { graphicsStore } from "../store/index";
 
-const props = defineProps<{ char: string }>();
+const props = defineProps<{ char: string, selected?: boolean}>();
 
 const charCode = computed(() => props.char.charCodeAt(0));
 const graphic = computed(() => graphicsStore.value[charCode.value]);
 </script>
 
 <template>
-  <div v-if="!!graphic" :data-char="char" class="aspect-square shrink relative outline-1 outline-slate-300 outline-dashed">
+  <div v-if="!!graphic" :data-char="char" class="aspect-square shrink relative outline-1 outline-slate-300 outline-dashed" :class="{'outline-4': props.selected}" @click="$emit('onSelected', props.char)">
   <svg viewBox="0 0 1024 1024" class="absolute top-0 left-0">
     <g
       stroke="gray"

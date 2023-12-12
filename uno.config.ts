@@ -1,9 +1,8 @@
 // uno.config.ts
-import { defineConfig } from 'unocss'
 import presetWind from '@unocss/preset-wind'
+import { defineConfig } from 'unocss'
 
 export default defineConfig({
-  presets: [
-    presetWind(),
-  ],
+  presets: [presetWind()],
+  safelist: ['outline-red-500', 'outline-4'],
 })

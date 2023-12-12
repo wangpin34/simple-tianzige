@@ -6,6 +6,7 @@ import { itemsStore } from "../store/index";
 import { settingsStore } from "../store/settings";
 import { isChineseChar } from '../utils/char';
 import { savePNG } from "../utils/image";
+import BiShun from './BiShun.vue';
 import Edit from "./Edit.vue";
 import TianZiGe from "./TianZiGe.vue";
 
@@ -27,15 +28,22 @@ const shareLink = computed(
     )}`
 );
 const textList = computed(() =>
-  item.value?.text.split("").map((s) => ({
+  item.value?.text.split("").map((s, index) => ({
+    id: index,
     char: s,
     isChinese: isChineseChar(s)
   }))
 );
 
+const theChar = ref(textList.value?.find((char) => char.isChinese) ?? undefined);
 const showShare = ref(false);
 const showQr = ref(false);
 const showEdit = ref(false);
+const showBinShun = ref(false)
+
+const onTianZiGeClick = (char: {id: number, char: string, isChinese: boolean}) => {
+  theChar.value = char
+};
 
 const onBack = () => {
   router.push("/");
@@ -109,7 +117,6 @@ const saveQrCodeImage = async () => {
     </template>
     <template #right>
       <div class="flex gap-4">
-        <van-icon name="share-o" size="18" @click="showShare = true" />
         <van-icon name="edit" size="18" @click="showEdit = true" />
       </div>
     </template>
@@ -123,7 +130,7 @@ const saveQrCodeImage = async () => {
         :style="`grid-template-columns:repeat(${settingsStore.value.tianzige.colsNum},1fr)`"
       >
         <template v-for="text in textList">
-          <TianZiGe v-if="text.isChinese" :char="text.char" />
+          <TianZiGe v-if="text.isChinese" :selected="theChar?.char === text.char && theChar?.id === text.id" :char="text.char" @on-selected="() => onTianZiGeClick(text)"/>
           <div v-else class="self-end">
             <span  class="text-2xl ">{{ text.char }}</span>
           </div>
@@ -137,7 +144,23 @@ const saveQrCodeImage = async () => {
     </div>
   </div>
 
+  <van-action-bar class="justify-end">
+     <van-action-bar-icon icon="share-o" text="分享"  @click="showShare = true" />
+     <van-action-bar-icon icon="play-circle-o" text="笔顺" @click="showBinShun = true "/>
+  </van-action-bar>
 
+  <van-action-sheet v-model:show="showBinShun">
+    <div class="p-8 flex flex-col justify-center">
+      <div v-if="theChar">
+        <div class="grid grid-cols-3 gap-4">
+        <BiShun :char="theChar.char" />
+        </div>
+      </div>
+    </div>
+  </van-action-sheet>
+
+
+  <!-- share start-->
   <van-share-sheet
     v-model:show="showShare"
     title="立即分享给好友"
@@ -152,12 +175,15 @@ const saveQrCodeImage = async () => {
       <van-button text="保存二维码" @click="saveQrCodeImage" />
     </div>
   </van-action-sheet>
+  <!-- share end -->
 
+  <!-- edit start-->
   <van-action-sheet v-if="item" v-model:show="showEdit">
     <div>
       <Edit :text="item.text" :onOK="onSave" :onCancel="onCancelSave" />
     </div>
   </van-action-sheet>
+  <!-- edit end-->
 </template>
 
 <style scoped></style>
