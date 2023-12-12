@@ -28,9 +28,9 @@ const textToColor = (text: string) => {
     <div class="flex-grow">
       <div class="grid grid-cols-2 gap-4" >
         <template v-for="item in itemsStore.value">
-          <router-link :to="`/items/${item.id}`" class="rounded-lg p-5 aspect-square " :style="{ backgroundColor: textToColor(item.text) }">
-            <div class="w-full h-full overflow-clip text-md leading-normal text-slate-100">
-              {{ item.text }}
+          <router-link :to="`/items/${item.id}`" class="rounded-lg p-5 aspect-square flex" :style="{ backgroundColor: textToColor(item.text) }">
+            <div class="grow overflow-clip">              
+              <p class="m-0 text-base text-slate-100 leading-normal">{{ item.text }}</p>
             </div>
           </router-link>
         </template>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref } from 'vue';
 
 const { text, onOK, onCancel } = defineProps<{
   text: string
@@ -10,15 +10,10 @@ const { text, onOK, onCancel } = defineProps<{
 const inputText = ref<string>(text)
 
 const isValid = computed(() => !!inputText.value)
-const regex = /[\u4e00-\u9fa5]/;
-const filterNotChineseChar = (str: string) => {
-  return str.split('').filter(s => !!s && regex.test(s)).join('')
-}
 
 
 const handleOk = () => {
-  const safeText = filterNotChineseChar(inputText.value)
-  onOK(safeText)
+  onOK(inputText.value)
 }
 </script>
 

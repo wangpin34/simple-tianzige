@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { onMounted, watch, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { useRouter } from "vue-router";
-import type { Graphic, Item } from "./types/index";
 import { graphicsStore, itemsStore } from "./store/index";
+import type { Graphic, Item } from "./types/index";
 
 const activeTab = ref(0);
 const router = useRouter();

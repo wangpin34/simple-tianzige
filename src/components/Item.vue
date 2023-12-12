@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
-import TianZiGe from "./TianZiGe.vue";
-import { savePNG } from "../utils/image";
 import { showToast } from "vant";
+import { computed, ref, watch } from "vue";
+import { useRoute, useRouter } from "vue-router";
 import { itemsStore } from "../store/index";
 import { settingsStore } from "../store/settings";
-import { useRoute, useRouter } from "vue-router";
+import { isChineseChar } from '../utils/char';
+import { savePNG } from "../utils/image";
 import Edit from "./Edit.vue";
-import { watch } from "vue";
+import TianZiGe from "./TianZiGe.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -26,9 +26,11 @@ const shareLink = computed(
       item.value?.text ?? ""
     )}`
 );
-const regex = /[\u4e00-\u9fa5]/;
 const textList = computed(() =>
-  item.value?.text.split("").filter((s) => !!s && regex.test(s))
+  item.value?.text.split("").map((s) => ({
+    char: s,
+    isChinese: isChineseChar(s)
+  }))
 );
 
 const showShare = ref(false);
@@ -120,8 +122,12 @@ const saveQrCodeImage = async () => {
         class="grid gap-2 p-4 rounded-lg shadow-md shadow-slate-300 bg-white"
         :style="`grid-template-columns:repeat(${settingsStore.value.tianzige.colsNum},1fr)`"
       >
-        <template v-for="char in textList">
-          <TianZiGe :char="char" />
+        <template v-for="text in textList">
+          <TianZiGe v-if="text.isChinese" :char="text.char" />
+          <div v-else class="self-end">
+            <span  class="text-2xl ">{{ text.char }}</span>
+          </div>
+          
         </template>
       </div>
       <div v-else class="flex flex-col items-center justify-center h-full">

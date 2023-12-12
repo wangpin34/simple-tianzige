@@ -1,20 +1,16 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
-import { nanoid } from 'nanoid'
-import { itemsStore } from "../store/index";
+import { nanoid } from 'nanoid';
+import { computed, ref } from 'vue';
 import { useRouter } from "vue-router";
+import { itemsStore } from "../store/index";
 const text = ref<string>('')
 const isValid = computed(() => !!text.value) 
 const router = useRouter();
-const regex = /[\u4e00-\u9fa5]/;
-const filterNotChineseChar = (str: string) => {
-  return str.split('').filter(s => !!s && regex.test(s)).join('')
-}
 const onOK = () => {
   const id = nanoid()
   const item = {
     id,
-    text: filterNotChineseChar(text.value)
+    text: text.value
   }
   itemsStore.value.push(item)
   router.push('/items/' + 
