@@ -1,23 +1,21 @@
 <script setup lang="ts">
 import { showToast } from 'vant'
-import { computed, ref, watch } from 'vue'
+import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { itemsStore } from '../store/index'
-import { settingsStore } from '../store/settings'
+import useSettingsStore from '../store/settings'
 import { isChineseChar } from '../utils/char'
 import { savePNG } from '../utils/image'
 import BiShun from './BiShun.vue'
 import Edit from './Edit.vue'
 import TianZiGe from './TianZiGe.vue'
 
+
 const route = useRoute()
 const router = useRouter()
+const settingsStore = useSettingsStore()
 
-const colsNum = ref(settingsStore.value.tianzige.colsNum)
-
-watch(settingsStore, () => {
-  colsNum.value = settingsStore.value.tianzige.colsNum
-})
+const size = computed(() => settingsStore.size)
 
 const id = route.params.id
 const item = computed(() => itemsStore.value.find((item) => item.id === id))
@@ -40,6 +38,7 @@ const showShare = ref(false)
 const showQr = ref(false)
 const showEdit = ref(false)
 const showBinShun = ref(false)
+const showSettings = ref(false)
 
 const onTianZiGeClick = (char: {
   id: number
@@ -132,7 +131,7 @@ const saveQrCodeImage = async () => {
       <div
         v-if="textList?.length"
         class="grid gap-2 p-4 rounded-lg shadow-md shadow-slate-300 bg-white"
-        :style="`grid-template-columns:repeat(${settingsStore.value.tianzige.colsNum},1fr)`"
+        :class="[`grid-cols-${settingsStore.cols}`]"
       >
         <template v-for="text in textList">
           <TianZiGe
@@ -153,6 +152,7 @@ const saveQrCodeImage = async () => {
     </div>
   </div>
 
+  
   <van-action-bar class="justify-end">
     <van-action-bar-icon icon="share-o" text="分享" @click="showShare = true" />
     <van-action-bar-icon
@@ -160,13 +160,46 @@ const saveQrCodeImage = async () => {
       text="笔顺"
       @click="showBinShun = true"
     />
+    <van-action-bar-icon
+      icon="setting-o"
+      text="设置"
+      @click="showSettings = true"
+    />
   </van-action-bar>
 
+    <!-- font start-->
+    <van-action-sheet v-if="item" v-model:show="showSettings">
+      <div class="p-8 flex flex-col justify-start">
+        <div class="py-4 flex items-center">
+          <van-icon
+            name="/icons/font.svg"
+            size="14"
+            class="pr-4"
+          />
+           <van-slider
+            v-model="size"
+            :min="0"
+            :max="2"
+            :step="1"
+            @change="(n) => settingsStore.setSize(n)"
+          />
+           <van-icon
+              name="/icons/font.svg"
+              size="20"
+              class="pl-4"
+            />
+        </div>
+      </div>
+    </van-action-sheet>
+    <!-- font end-->
+
+  <!-- bishun start-->
   <van-action-sheet v-model:show="showBinShun">
     <div class="p-8 flex flex-col justify-center">
-        <BiShun :char="theChar.char" />
+        <BiShun v-if="!!theChar" :char="theChar.char" />
     </div>
   </van-action-sheet>
+  <!-- bishun end-->
 
   <!-- share start-->
   <van-share-sheet

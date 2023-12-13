@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from "vue";
-import { useRoute, useRouter } from "vue-router";
+import { onMounted, ref, watch } from "vue";
+import { useRouter } from "vue-router";
 import useGraphicsStore from './store/graphics';
 import { itemsStore } from "./store/index";
 import type { Graphic, Item } from "./types/index";
@@ -9,9 +9,6 @@ const graphicsStore = useGraphicsStore()
 
 const activeTab = ref(0);
 const router = useRouter();
-const route = useRoute()
-
-const showTabbar = computed(() => route.path === '/' || route.path === '/settings')
 
 
 watch(activeTab, () => {
@@ -60,10 +57,6 @@ watch(
 <template>
   <div class="flex flex-col h-screen bg-slate-50">
     <router-view></router-view>
-    <van-tabbar v-model="activeTab" v-if="showTabbar">
-      <van-tabbar-item icon="orders-o">字帖</van-tabbar-item>
-      <van-tabbar-item icon="setting-o">设置</van-tabbar-item>
-    </van-tabbar>
   </div>
 </template>
 

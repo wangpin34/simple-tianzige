@@ -1,8 +1,7 @@
 // main.ts
 import Create from 'components/Create.vue'
-import Home from 'components/Home.vue'
 import Item from 'components/Item.vue'
-import Settings from 'components/Settings.vue'
+import Items from 'components/Items.vue'
 import Share from 'components/Share.vue'
 import { createPinia } from 'pinia'
 import {
@@ -32,9 +31,8 @@ import App from './App.vue'
 import './style.css'
 
 const routes = [
-  { path: '/', component: Home },
+  { path: '/', component: Items },
   { path: '/items/:id', component: Item },
-  { path: '/settings', component: Settings },
   { path: '/create', component: Create },
   {
     path: '/share',
