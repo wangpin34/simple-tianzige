@@ -17,7 +17,7 @@ const onReplay = () => {
 
 <template>
     
-    <div class="relative aspect-square flex flex-col items-center outline-1 outline-slate-300 outline-dashed">
+    <div class="relative max-w-full aspect-square outline-1 outline-slate-300 outline-dashed">
       <img :src="`/graphics-bishun/${charCode}.svg?timestamp=${timestamp}`"/>
       <van-icon name="replay" size="36" class="absolute bottom-2 right-2" @click="onReplay"/>
     </div>
