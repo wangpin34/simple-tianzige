@@ -164,11 +164,7 @@ const saveQrCodeImage = async () => {
 
   <van-action-sheet v-model:show="showBinShun">
     <div class="p-8 flex flex-col justify-center">
-      <div v-if="theChar">
-        <div class="grid grid-cols-5 gap-4">
-          <BiShun :char="theChar.char" />
-        </div>
-      </div>
+        <BiShun :char="theChar.char" />
     </div>
   </van-action-sheet>
 

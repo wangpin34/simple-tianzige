@@ -4,6 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "devide-graphics": "ts-node --esm devide.ts",
     "dev": "vite",
     "build": "vue-tsc && vite build",
     "preview": "vite preview"
@@ -11,11 +12,13 @@
   "dependencies": {
     "html-to-image": "^1.11.11",
     "nanoid": "^5.0.4",
+    "pinia": "^2.1.7",
     "vant": "^4.8.0",
     "vue": "^3.3.8",
     "vue-router": "^4.2.5"
   },
   "devDependencies": {
+    "@types/node": "^20.10.4",
     "@unocss/preset-wind": "^0.58.0",
     "@vitejs/plugin-vue": "^4.5.0",
     "typescript": "^5.2.2",

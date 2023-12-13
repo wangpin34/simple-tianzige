@@ -1,16 +1,31 @@
 <script setup lang="ts">
-import { computed } from "vue";
-import { graphicsStore } from "../store/index";
+import { computed, onMounted, ref } from "vue";
+import useGraphicsStore from '../store/graphics';
+import type { Graphic } from "../types/index";
+const graphicsStore = useGraphicsStore()
 
 const props = defineProps<{ char: string, selected?: boolean}>();
 
-const charCode = computed(() => props.char.charCodeAt(0));
-const graphic = computed(() => graphicsStore.value[charCode.value]);
+const graphic = ref<Graphic>()
+const charCode = computed(() => props.char.charCodeAt(0))
+
+onMounted(() => {
+  graphic.value = graphicsStore.getGraphicsByCode(charCode.value)
+  if (!graphic.value) {
+    ;(async () => {
+      const graphicObj = await fetch(`/graphics/${charCode.value}.json`).then(res => res.json())
+      graphic.value = graphicObj
+      graphicsStore.addGraphic(charCode.value, graphicObj)
+    })()
+  }
+})
+
+//const graphic = graphicsStore.graphics[props.char.charCodeAt(0)]
 </script>
 
 <template>
-  <div v-if="!!graphic" :data-char="char" class="aspect-square shrink relative outline-1 outline-slate-300 outline-dashed" :class="{'outline-4': props.selected}" @click="$emit('onSelected', props.char)">
-  <svg viewBox="0 0 1024 1024" class="absolute top-0 left-0">
+  <div  :data-char="char" class="aspect-square shrink relative outline-1 outline-slate-300 outline-dashed" :class="{'outline-4': props.selected}" @click="$emit('onSelected', props.char)">
+  <svg v-if="!!graphic" viewBox="0 0 1024 1024" class="absolute top-0 left-0">
     <g
       stroke="gray"
       stroke-dasharray="1,1"

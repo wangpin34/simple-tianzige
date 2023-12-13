@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { graphicsStore, itemsStore } from "./store/index";
+import useGraphicsStore from './store/graphics';
+import { itemsStore } from "./store/index";
 import type { Graphic, Item } from "./types/index";
+
+const graphicsStore = useGraphicsStore()
 
 const activeTab = ref(0);
 const router = useRouter();
@@ -35,12 +38,13 @@ onMounted(() => {
     const rep = await fetch("/graphics.txt");
     const gStr = await rep.text();
     const lines = gStr.split("\n").filter((s) => !!s);
-    graphicsStore.value = lines
+    const graphics = lines
       .map((line) => JSON.parse(line) as Graphic)
       .reduce((a, c) => {
         a[c.character.charCodeAt(0)] = c;
         return a;
       }, {} as Record<string, Graphic>);
+    graphicsStore.graphics = graphics
   })();
 });
 
