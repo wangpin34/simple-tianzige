@@ -24,7 +24,7 @@ const textToColor = (text: string) => {
       <van-icon name="plus" size="18" @click="router.push('/create')" />
     </template>
   </van-nav-bar>
-  <div id="home" class="p-8 grow  max-h-full flex flex-col gap-2">
+  <div id="home" class="m-content p-8 grow  max-h-full flex flex-col gap-2">
     <div class="flex-grow">
       <div class="grid grid-cols-2 gap-4" >
         <template v-for="item in itemsStore.value">
@@ -40,4 +40,5 @@ const textToColor = (text: string) => {
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+</style>

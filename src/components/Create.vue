@@ -32,7 +32,7 @@ const onBack = () => {
       <span @click="onOK">完成</span>
     </template>
   </van-nav-bar>
-  <van-cell-group class="m-8 bg-white p-4 rounded-lg">
+  <van-cell-group class="m-content mx-8 mb-8 bg-white p-4 rounded-lg">
     <van-row>
       <van-field
         v-model="text"
