@@ -1,6 +1,6 @@
 // service-worker.js
 
-const unSupportedProtocols = ['chrome-extension']
+const unSupportedProtocols = ['chrome-extension:']
 const putInCache = async (request, response) => {
   const url = new URL(request.url)
   const protocol = url.protocol
