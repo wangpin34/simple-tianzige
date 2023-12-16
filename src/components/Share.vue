@@ -1,22 +1,15 @@
 <script setup lang="ts">
 import { nanoid } from "nanoid";
 import TianZiGe from "./TianZiGe.vue"
-import { itemsStore } from "../store/index";
+import useItemsStore from "../store/items";
 import { showToast  } from 'vant'
 import { useRouter, useRoute } from "vue-router";
 
 const route = useRoute();
-
-const regex = /[\u4e00-\u9fa5]/;
-const filterNotChineseChar = (str: string) => {
-  return str
-    .split("")
-    .filter((s) => !!s && regex.test(s))
-    .join("");
-};
+const itemsStore = useItemsStore()
 
 const queryText = route.query.text
-const text = filterNotChineseChar(decodeURIComponent(queryText as string));
+const text = decodeURIComponent(queryText as string)
 const textList = text.split("").filter((s) => !!s && regex.test(s))
 const router = useRouter();
 
@@ -24,9 +17,9 @@ const onSave = () => {
   const id = nanoid()
   const item = {
     id,
-    text: filterNotChineseChar(text)
+    text
   }
-  itemsStore.value.push(item)
+  itemsStore.add(item)
   showToast('保存成功')
   router.push('/items/' +
     id);

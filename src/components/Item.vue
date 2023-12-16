@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { showToast } from 'vant'
+import { showToast, showConfirmDialog } from 'vant'
 import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { itemsStore } from '../store/index'
+import useItemsStore from '../store/items'
 import useSettingsStore from '../store/settings'
 import { isChineseChar } from '../utils/char'
 import { savePNG } from '../utils/image'
@@ -10,7 +10,7 @@ import BiShun from './BiShun.vue'
 import Edit from './Edit.vue'
 import TianZiGe from './TianZiGe.vue'
 
-
+const itemsStore = useItemsStore()
 const route = useRoute()
 const router = useRouter()
 const settingsStore = useSettingsStore()
@@ -18,15 +18,15 @@ const settingsStore = useSettingsStore()
 const size = computed(() => settingsStore.size)
 
 const id = route.params.id
-const item = computed(() => itemsStore.value.find((item) => item.id === id))
+const item = computed(() => itemsStore.item(id as string))
 const shareLink = computed(
   () =>
     `${window.location.origin}/#/share?text=${encodeURIComponent(
-      item.value?.text ?? ''
+      item?.value?.text ?? ''
     )}`
 )
 const textList = computed(() =>
-  item.value?.text.split('').map((s, index) => ({
+  item?.value?.text.split('').map((s, index) => ({
     id: index,
     char: s,
     isChinese: isChineseChar(s),
@@ -62,6 +62,25 @@ const onSave = (text: string) => {
 
 const onCancelSave = () => {
   showEdit.value = false
+}
+
+const onRemove = () => {
+  itemsStore.remove(item.value!)
+  showToast("已删除")
+}
+
+const handleRemove = () => {
+  showConfirmDialog({
+    title: '删除',
+    message:
+    '真的要删除吗？',
+  }).then(() => {
+    onRemove()
+    router.push('/')
+  })
+  .catch(() => {
+    // do nothing on cancel
+  });
 }
 
 enum ShareOption {
@@ -120,14 +139,14 @@ const saveQrCodeImage = async () => {
       <van-icon name="arrow-left" size="18" @click="onBack" />
     </template>
     <template #right>
-      <div class="flex gap-4">
+      <div class="flex gap-4" v-if="!!item">
         <van-icon name="edit" size="18" @click="showEdit = true" />
       </div>
     </template>
   </van-nav-bar>
 
   <div id="home" class="m-content p-8 grow flex flex-col gap-2">
-    <div class="flex-grow" id="tianzige">
+    <div class="flex-grow" id="tianzige" v-if="item">
       <div
         v-if="textList?.length"
         class="grid gap-2 p-4 rounded-lg shadow-md shadow-slate-300 bg-white"
@@ -150,10 +169,21 @@ const saveQrCodeImage = async () => {
         <p class="text-gray-500">暂无数据</p>
       </div>
     </div>
+    <div v-else class="w-full h-full flex flex-col justify-center items-center">
+      <van-icon name="warn-o" size="24" />
+      <p>
+        数据加载失败
+      </p>
+    </div>
   </div>
 
   
-  <van-action-bar class="justify-end">
+  <van-action-bar class="justify-end" v-if="item">
+    <van-action-bar-icon
+      icon="delete-o"
+      text="删除"
+      @click="handleRemove"
+    />
     <van-action-bar-icon icon="share-o" text="分享" @click="showShare = true" />
     <van-action-bar-icon
       icon="play-circle-o"

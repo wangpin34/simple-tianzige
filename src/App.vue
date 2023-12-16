@@ -2,9 +2,10 @@
 import { onMounted, ref, watch } from "vue";
 import { useRouter } from "vue-router";
 import useGraphicsStore from './store/graphics';
-import { itemsStore } from "./store/index";
+import useItemsStore from "./store/items"
 import type { Graphic, Item } from "./types/index";
 
+const itemsStore = useItemsStore()
 const graphicsStore = useGraphicsStore()
 
 const activeTab = ref(0);
@@ -28,7 +29,7 @@ onMounted(() => {
   const cachedItemsVal = localStorage.getItem("items");
   if (cachedItemsVal) {
     const items = JSON.parse(cachedItemsVal);
-    itemsStore.value = items ?? ([] as Item[]);
+    items && itemsStore.replaceItems(items as Item[])
   }
 
   (async () => {

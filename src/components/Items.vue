@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
-import { itemsStore } from "../store/index";
+import useItemsStore from "../store/items";
 
+const itemsStore = useItemsStore()
 const router = useRouter()
 
 const colors = ['#569597', '#7ba1a8', '#f36838', '#ff4777', '#057748', '#574266', '#8d4bbb', '#3d3b4f']
@@ -27,7 +28,7 @@ const textToColor = (text: string) => {
   <div id="home" class="m-content p-8 grow  max-h-full flex flex-col gap-2">
     <div class="flex-grow">
       <div class="grid grid-cols-2 gap-4" >
-        <template v-for="item in itemsStore.value">
+        <template v-for="item in itemsStore.items">
           <router-link :to="`/items/${item.id}`" class="rounded-lg p-5 aspect-square flex" :style="{ backgroundColor: textToColor(item.text) }">
             <div class="grow overflow-clip">              
               <p class="m-0 text-base text-slate-100 leading-normal">{{ item.text }}</p>

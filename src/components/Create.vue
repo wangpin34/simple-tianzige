@@ -2,12 +2,13 @@
 import { nanoid } from 'nanoid'
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { itemsStore } from '../store/index'
+import useItemsStore  from '../store/items'
 import useSettingsStore from '../store/settings'
 import { isChineseChar } from '../utils/char'
 import BiShun from './BiShun.vue'
 import TianZiGe from './TianZiGe.vue'
 
+const itemsStore = useItemsStore()
 const settingsStore = useSettingsStore()
 const size = computed(() => settingsStore.size)
 const text = ref<string>('')
@@ -19,7 +20,7 @@ const onOK = () => {
     id,
     text: text.value,
   }
-  itemsStore.value.push(item)
+  itemsStore.add(item)
   router.push('/items/' + id)
 }
 
