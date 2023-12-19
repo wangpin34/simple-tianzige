@@ -26,5 +26,9 @@
     "vite": "^5.0.0",
     "vite-tsconfig-paths": "^4.2.1",
     "vue-tsc": "^1.8.22"
+  },
+  "engines": {
+    "node": ">=20.10.0",
+    "npm": ">=10.2.3"
   }
 }
