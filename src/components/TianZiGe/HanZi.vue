@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
-import useGraphicsStore from '../store/graphics';
-import type { Graphic } from "../types/index";
+import useGraphicsStore from '../../store/graphics';
+import type { Graphic } from "../../types/index";
 const graphicsStore = useGraphicsStore()
 
 const props = defineProps<{ char: string, selected?: boolean}>();
@@ -20,11 +20,10 @@ onMounted(() => {
   }
 })
 
-//const graphic = graphicsStore.graphics[props.char.charCodeAt(0)]
 </script>
 
 <template>
-  <div  :data-char="char" class="aspect-square shrink relative outline-1 outline-slate-300 outline-dashed" :class="{'outline-4': props.selected}" @click="$emit('onSelected', props.char)">
+  <div :data-char="char" class="aspect-square shrink relative outline-1 outline-slate-300 outline-dashed cursor-pointer" :class="{'outline-4': props.selected}" @click="$emit('selected')">
   <svg v-if="!!graphic" viewBox="0 0 1024 1024" class="absolute top-0 left-0">
     <g
       stroke="gray"

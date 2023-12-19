@@ -49,7 +49,7 @@ onMounted(() => {
 watch(
   itemsStore,
   () => {
-    localStorage.setItem("items", JSON.stringify(itemsStore.value));
+    localStorage.setItem("items", JSON.stringify(itemsStore.items));
   },
   { deep: true }
 );

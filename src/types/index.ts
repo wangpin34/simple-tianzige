@@ -8,6 +8,7 @@ interface Graphic {
 interface Item {
   id: string
   text: string
+  color?: string
 }
 
 export type { Graphic, Item }

@@ -1,21 +1,11 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
 import useItemsStore from "../store/items";
+import { defaultColor } from '../utils/text'
 
 const itemsStore = useItemsStore()
 const router = useRouter()
 
-const colors = ['#569597', '#7ba1a8', '#f36838', '#ff4777', '#057748', '#574266', '#8d4bbb', '#3d3b4f']
-
-const textToNumber = (text: string, max: number) => {
-  const sum = text.split('').map(t => t.charCodeAt(0)).reduce((a, c) => a + c, 0)
-  return sum % max
-}
-
-const textToColor = (text: string) => {
-  const num = textToNumber(text, colors.length)
-  return colors[num]
-}
 
 </script>
 
@@ -29,7 +19,7 @@ const textToColor = (text: string) => {
     <div class="flex-grow">
       <div class="grid grid-cols-2 gap-4" >
         <template v-for="item in itemsStore.items">
-          <router-link :to="`/items/${item.id}`" class="rounded-lg p-5 aspect-square flex" :style="{ backgroundColor: textToColor(item.text) }">
+          <router-link :to="`/items/${item.id}`" class="rounded-lg p-5 aspect-square flex" :style="{ backgroundColor: item.color ?? defaultColor }">
             <div class="grow overflow-clip">              
               <p class="m-0 text-base text-slate-100 leading-normal">{{ item.text }}</p>
             </div>

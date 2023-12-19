@@ -4,9 +4,9 @@ import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import useItemsStore  from '../store/items'
 import useSettingsStore from '../store/settings'
-import { isChineseChar } from '../utils/char'
 import BiShun from './BiShun.vue'
-import TianZiGe from './TianZiGe.vue'
+import TianZiGe from './TianZiGe/index.vue'
+import { textToColor } from '../utils/text'
 
 const itemsStore = useItemsStore()
 const settingsStore = useSettingsStore()
@@ -19,6 +19,7 @@ const onOK = () => {
   const item = {
     id,
     text: text.value,
+    color: textToColor(text.value)
   }
   itemsStore.add(item)
   router.push('/items/' + id)
@@ -30,20 +31,8 @@ const onBack = () => {
 
 const showBinShun = ref(false)
 const showSettings = ref(false)
-
-const textList = computed(() =>
-  text.value.split('').map((s, index) => ({
-    id: index,
-    char: s,
-    isChinese: isChineseChar(s),
-  }))
-)
-const theChar = ref(textList.value?.find((char) => char.isChinese) ?? undefined)
-const onTianZiGeClick = (char: {
-  id: number
-  char: string
-  isChinese: boolean
-}) => {
+const theChar = ref<string>()
+const onTianZiGeClick = (char: string) => {
   theChar.value = char
   showBinShun.value = true
 }
@@ -77,23 +66,7 @@ const onTianZiGeClick = (char: {
       </van-row>
     </van-cell-group>
 
-    <div
-      v-if="textList?.length"
-      class="mt-8 grid gap-2 p-4 rounded-lg shadow-md shadow-slate-300 bg-white"
-      :class="[`grid-cols-${settingsStore.cols}`]"
-    >
-      <template v-for="text in textList">
-        <TianZiGe
-          v-if="text.isChinese"
-          :selected="theChar?.char === text.char && theChar?.id === text.id"
-          :char="text.char"
-          @on-selected="() => onTianZiGeClick(text)"
-        />
-        <div v-else class="self-end">
-          <span class="text-2xl">{{ text.char }}</span>
-        </div>
-      </template>
-    </div>
+   <TianZiGe :text="text" @handle-selected="(char) => onTianZiGeClick(char)" />
   </div>
 
   <van-action-bar class="justify-end">
@@ -130,7 +103,7 @@ const onTianZiGeClick = (char: {
   <!-- bishun start-->
   <van-action-sheet v-model:show="showBinShun">
     <div class="p-8 flex flex-col justify-center">
-      <BiShun v-if="!!theChar" :char="theChar.char" />
+      <BiShun v-if="!!theChar" :char="theChar" />
     </div>
   </van-action-sheet>
   <!-- bishun end-->

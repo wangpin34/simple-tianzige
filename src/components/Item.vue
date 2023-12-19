@@ -4,11 +4,10 @@ import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import useItemsStore from '../store/items'
 import useSettingsStore from '../store/settings'
-import { isChineseChar } from '../utils/char'
 import { savePNG } from '../utils/image'
 import BiShun from './BiShun.vue'
 import Edit from './Edit.vue'
-import TianZiGe from './TianZiGe.vue'
+import TianZiGe from './TianZiGe/index.vue'
 
 const itemsStore = useItemsStore()
 const route = useRoute()
@@ -25,27 +24,18 @@ const shareLink = computed(
       item?.value?.text ?? ''
     )}`
 )
-const textList = computed(() =>
-  item?.value?.text.split('').map((s, index) => ({
-    id: index,
-    char: s,
-    isChinese: isChineseChar(s),
-  }))
-)
 
-const theChar = ref(textList.value?.find((char) => char.isChinese) ?? undefined)
+const selectedCharIndex = ref<number>(0)
+const theChar = computed(() => item.value?.text.charAt(selectedCharIndex.value ?? 0))
 const showShare = ref(false)
 const showQr = ref(false)
 const showEdit = ref(false)
 const showBinShun = ref(false)
 const showSettings = ref(false)
 
-const onTianZiGeClick = (char: {
-  id: number
-  char: string
-  isChinese: boolean
-}) => {
-  theChar.value = char
+const onTianZiGeClick = (char: string, index: number) => {
+  console.info(`selected "${char}" at index[${index}]`)
+  selectedCharIndex.value = index
   showBinShun.value = true
 }
 
@@ -72,8 +62,6 @@ const onRemove = () => {
 const handleRemove = () => {
   showConfirmDialog({
     title: '删除',
-    message:
-    '真的要删除吗？',
   }).then(() => {
     onRemove()
     router.push('/')
@@ -147,27 +135,8 @@ const saveQrCodeImage = async () => {
 
   <div id="home" class="m-content p-8 grow flex flex-col gap-2">
     <div class="flex-grow" id="tianzige" v-if="item">
-      <div
-        v-if="textList?.length"
-        class="grid gap-2 p-4 rounded-lg shadow-md shadow-slate-300 bg-white"
-        :class="[`grid-cols-${settingsStore.cols}`]"
-      >
-        <template v-for="text in textList">
-          <TianZiGe
-            v-if="text.isChinese"
-            :selected="theChar?.char === text.char && theChar?.id === text.id"
-            :char="text.char"
-            @on-selected="() => onTianZiGeClick(text)"
-          />
-          <div v-else class="self-end">
-            <span class="text-2xl">{{ text.char }}</span>
-          </div>
-        </template>
-      </div>
-      <div v-else class="flex flex-col items-center justify-center h-full">
-        <van-icon name="search" size="4rem" />
-        <p class="text-gray-500">暂无数据</p>
-      </div>
+      <TianZiGe :text="item.text" :selected="selectedCharIndex" @handle-selected="(char,index) => onTianZiGeClick(char, index)" />
+      
     </div>
     <div v-else class="w-full h-full flex flex-col justify-center items-center">
       <van-icon name="warn-o" size="24" />
@@ -178,7 +147,7 @@ const saveQrCodeImage = async () => {
   </div>
 
   
-  <van-action-bar class="justify-end" v-if="item">
+  <van-action-bar class="justify-around" v-if="item">
     <van-action-bar-icon
       icon="delete-o"
       text="删除"
@@ -226,7 +195,7 @@ const saveQrCodeImage = async () => {
   <!-- bishun start-->
   <van-action-sheet v-model:show="showBinShun">
     <div class="p-8 flex flex-col justify-center">
-        <BiShun v-if="!!theChar" :char="theChar.char" />
+        <BiShun v-if="!!theChar" :char="theChar" />
     </div>
   </van-action-sheet>
   <!-- bishun end-->
