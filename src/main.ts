@@ -6,6 +6,7 @@ import Share from 'components/Share.vue'
 import { createPinia } from 'pinia'
 import {
   ActionBar,
+  DropdownMenu, DropdownItem,
   ActionBarButton,
   ActionBarIcon,
   ActionSheet,
@@ -22,6 +23,7 @@ import {
   Tabbar,
   TabbarItem,
   Toast,
+  Popover
 } from 'vant'
 import 'vant/lib/index.css'
 import 'virtual:uno.css'
@@ -65,6 +67,9 @@ app.use(Tabbar)
 app.use(TabbarItem)
 app.use(Icon)
 app.use(Slider)
+app.use(DropdownMenu);
+app.use(DropdownItem);
+app.use(Popover);
 
 app.use(router)
 
