@@ -32,8 +32,4 @@ const textList = computed(() =>
       </div>
     </template>
   </div>
-  <div v-else class="flex flex-col items-center justify-center h-full">
-    <van-icon name="search" size="4rem" />
-    <p class="text-gray-500">暂无数据</p>
-  </div>
 </template>
