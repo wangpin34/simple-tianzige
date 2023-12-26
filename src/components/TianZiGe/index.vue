@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { isChineseChar } from "../../utils/char";
-import useSettingsStore from '../../store/settings'
+import useSettingsStore from "../../store/settings";
 import HanZi from "./HanZi.vue";
+import Symbol from './Symbol.vue'
 
-const settingsStore = useSettingsStore()
-const props = defineProps<{ text: string; cols?: number, selected?: number }>();
+const settingsStore = useSettingsStore();
+const props = defineProps<{ text: string; cols?: number; selected?: number }>();
 const textList = computed(() =>
   props.text?.split("").map((s, index) => ({
     id: index,
@@ -27,9 +28,7 @@ const textList = computed(() =>
         :char="text.char"
         @selected="() => $emit('handle-selected', text.char, text.id)"
       />
-      <div v-else class="self-end">
-        <span class="text-2xl">{{ text.char }}</span>
-      </div>
+      <Symbol v-else :char="text.char"/>
     </template>
   </div>
 </template>

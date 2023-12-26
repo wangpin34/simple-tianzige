@@ -147,7 +147,7 @@ const saveQrCodeImage = async () => {
     </van-popover>
 
     <div class="grow overflow-clip px-2">
-      <p class="m-0 text-base text-slate-100 leading-normal">
+      <p class="m-0 text-base text-slate-100 leading-normal font-family-cn">
         {{ item.text }}
       </p>
     </div>
