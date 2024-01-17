@@ -33,18 +33,40 @@ import App from './App.vue'
 import './style.css'
 
 const routes = [
-  { path: '/', component: Items },
+  { path: '/', component: Items, meta: { transition: 'slide-right' } },
   { path: '/items/:id', component: Item },
-  { path: '/create', component: Create },
+  { path: '/create', component: Create, meta: { transition: 'slide-left' }, },
   {
     path: '/share',
-    component: Share,
+    component: Share, meta: { transition: 'slide-left' },
   },
 ]
 const router = createRouter({
   // 4. Provide the history implementation to use. We are using the hash history for simplicity here.
   history: createWebHashHistory(),
   routes, // short for `routes: routes`
+})
+
+router.afterEach((to, from) => {
+  if (to.path === from.path) {
+      to.meta.transition = ''
+      return
+  }
+  if (!to.meta?.transition) {
+    if (to.path.includes(from.path) || from.path.includes(to.path)) {
+       const toDepth = to.path.split('/').length
+       const fromDepth = from.path.split('/').length
+        // from parent -> child: slide left
+        // from child -> parent: slide right
+        to.meta.transition = toDepth < fromDepth ? 'slide-right' : 'slide-left'
+        console.debug(`to.path=${to.path}, toDepth=${toDepth}, from.path=${from.path}, fromDepth=${fromDepth}`,to.path, to.meta.transition)
+        
+    } else if (/\/items\/[\d\D]+/.test(to.path) && /\/share/.test(from.path)) {
+      to.meta.transition = 'slide-left'
+    } else {
+      console.warn(`unknown transition: to.path=${to.path}, from.path=${from.path}`)
+    }
+  }  
 })
 
 const pinia = createPinia()

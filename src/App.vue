@@ -11,7 +11,6 @@ const graphicsStore = useGraphicsStore()
 const activeTab = ref(0);
 const router = useRouter();
 
-
 watch(activeTab, () => {
   switch (activeTab.value) {
     case 0:
@@ -57,8 +56,38 @@ watch(
 
 <template>
   <div class="flex flex-col h-screen bg-slate-50">
-    <router-view></router-view>
+    <router-view v-slot="{ Component, route }">
+      <transition :name="route.meta.transition as string || 'none'">
+        <component :is="Component" :key="route.path" />
+      </transition>
+    </router-view>
   </div>
 </template>
 
-<style scoped></style>
+<style>
+
+.slide-left-enter-active, .slide-left-leave-active, .slide-right-enter-active, .slide-right-leave-active {
+  transition: transform 0.3s ease-in-out;
+}
+.slide-left-enter-to, .slide-left-leave-from, .slide-right-enter-to, .slide-right-leave-from {
+  transform: translate(0%);
+}
+
+.slide-left-enter-from {
+  transform: translate(100%);
+}
+
+.slide-left-leave-to {
+  transform: translate(-100%);
+}
+
+
+.slide-right-enter-from {
+  transform: translate(-100%);
+}
+
+.slide-right-leave-to {
+  transform: translate(100%);
+}
+
+</style>

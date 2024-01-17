@@ -29,6 +29,7 @@ const onBack = () => {
 </script>
 
 <template>
+  <div class="fixed top-0 left-0 w-full h-full">
   <van-nav-bar title="来自分享">
     <template #left>
       <van-icon name="arrow-left" size="18" @click="onBack" />
@@ -45,6 +46,7 @@ const onBack = () => {
   <van-action-bar>
     <van-action-bar-button type="primary" text="收藏" @click="onSave" />
   </van-action-bar>
+  </div>
 </template>
 
 <style scoped></style>

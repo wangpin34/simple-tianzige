@@ -125,96 +125,105 @@ const saveQrCodeImage = async () => {
 </script>
 
 <template>
-  <van-nav-bar :fixed="true">
-    <template #left>
-      <van-icon name="arrow-left" size="18" @click="onBack" />
-    </template>
-    <template #right>
-      <div class="flex gap-4" v-if="!!item">
-        <van-icon name="edit" size="18" @click="showEdit = true" />
-      </div>
-    </template>
-  </van-nav-bar>
+  <div class="fixed top-0 left-0 w-full h-full">
+    <van-nav-bar :fixed="true">
+      <template #left>
+        <van-icon name="arrow-left" size="18" @click="onBack" />
+      </template>
+      <template #right>
+        <div class="flex gap-4" v-if="!!item">
+          <van-icon name="edit" size="18" @click="showEdit = true" />
+        </div>
+      </template>
+    </van-nav-bar>
 
-  <div id="home" class="m-content p-8 grow flex flex-col gap-2">
-    <div class="flex-grow" id="tianzige" v-if="item">
-      <TianZiGe
-        :text="item.text"
-        :selected="selectedCharIndex"
-        @handle-selected="(char, index) => onTianZiGeClick(char, index)"
-      />
-    </div>
-    <div v-else class="w-full h-full flex flex-col justify-center items-center">
-      <van-icon name="warn-o" size="24" />
-      <p>数据加载失败</p>
-    </div>
-  </div>
-
-  <van-action-bar class="justify-around" v-if="item">
-    <van-action-bar-icon icon="delete-o" text="删除" @click="handleRemove" />
-    <van-action-bar-icon icon="share-o" text="分享" @click="showShare = true" />
-    <van-action-bar-icon
-      icon="play-circle-o"
-      text="笔顺"
-      @click="showBinShun = true"
-    />
-    <van-action-bar-icon
-      icon="setting-o"
-      text="设置"
-      @click="showSettings = true"
-    />
-  </van-action-bar>
-
-  <!-- font start-->
-  <van-action-sheet v-if="item" v-model:show="showSettings">
-    <div class="p-8 flex flex-col justify-start">
-      <div class="py-4 flex items-center">
-        <van-icon name="/icons/font.svg" size="14" class="pr-4" />
-        <van-slider
-          v-model="size"
-          :min="0"
-          :max="2"
-          :step="1"
-          @change="(n) => settingsStore.setSize(n)"
+    <div id="home" class="m-content p-8 grow flex flex-col gap-2">
+      <div class="flex-grow" id="tianzige" v-if="item">
+        <TianZiGe
+          :text="item.text"
+          :selected="selectedCharIndex"
+          @handle-selected="(char, index) => onTianZiGeClick(char, index)"
         />
-        <van-icon name="/icons/font.svg" size="20" class="pl-4" />
+      </div>
+      <div
+        v-else
+        class="w-full h-full flex flex-col justify-center items-center"
+      >
+        <van-icon name="warn-o" size="24" />
+        <p>数据加载失败</p>
       </div>
     </div>
-  </van-action-sheet>
-  <!-- font end-->
 
-  <!-- bishun start-->
-  <van-action-sheet v-model:show="showBinShun">
-    <div class="p-8 flex flex-col justify-center">
-      <BiShun v-if="!!theChar" :char="theChar" />
-    </div>
-  </van-action-sheet>
-  <!-- bishun end-->
+    <van-action-bar class="justify-around" v-if="item">
+      <van-action-bar-icon icon="delete-o" text="删除" @click="handleRemove" />
+      <van-action-bar-icon
+        icon="share-o"
+        text="分享"
+        @click="showShare = true"
+      />
+      <van-action-bar-icon
+        icon="play-circle-o"
+        text="笔顺"
+        @click="showBinShun = true"
+      />
+      <van-action-bar-icon
+        icon="setting-o"
+        text="设置"
+        @click="showSettings = true"
+      />
+    </van-action-bar>
 
-  <!-- share start-->
-  <van-share-sheet
-    v-model:show="showShare"
-    title="立即分享给好友"
-    :options="options"
-    @select="onShare"
-  />
-  <van-action-sheet v-model:show="showQr">
-    <div class="p-8 flex flex-col justify-center">
-      <div id="qr-code" class="w-36 h-36 m-auto">
-        <qr-code :contents="shareLink"></qr-code>
+    <!-- font start-->
+    <van-action-sheet v-if="item" v-model:show="showSettings">
+      <div class="p-8 flex flex-col justify-start">
+        <div class="py-4 flex items-center">
+          <van-icon name="/icons/font.svg" size="14" class="pr-4" />
+          <van-slider
+            v-model="size"
+            :min="0"
+            :max="2"
+            :step="1"
+            @change="(n) => settingsStore.setSize(n)"
+          />
+          <van-icon name="/icons/font.svg" size="20" class="pl-4" />
+        </div>
       </div>
-      <van-button text="保存二维码" @click="saveQrCodeImage" />
-    </div>
-  </van-action-sheet>
-  <!-- share end -->
+    </van-action-sheet>
+    <!-- font end-->
 
-  <!-- edit start-->
-  <van-action-sheet v-if="item" v-model:show="showEdit">
-    <div>
-      <Edit :text="item.text" :onOK="onSave" :onCancel="onCancelSave" />
-    </div>
-  </van-action-sheet>
-  <!-- edit end-->
+    <!-- bishun start-->
+    <van-action-sheet v-model:show="showBinShun">
+      <div class="p-8 flex flex-col justify-center">
+        <BiShun v-if="!!theChar" :char="theChar" />
+      </div>
+    </van-action-sheet>
+    <!-- bishun end-->
+
+    <!-- share start-->
+    <van-share-sheet
+      v-model:show="showShare"
+      title="立即分享给好友"
+      :options="options"
+      @select="onShare"
+    />
+    <van-action-sheet v-model:show="showQr">
+      <div class="p-8 flex flex-col justify-center">
+        <div id="qr-code" class="w-36 h-36 m-auto">
+          <qr-code :contents="shareLink"></qr-code>
+        </div>
+        <van-button text="保存二维码" @click="saveQrCodeImage" />
+      </div>
+    </van-action-sheet>
+    <!-- share end -->
+
+    <!-- edit start-->
+    <van-action-sheet v-if="item" v-model:show="showEdit">
+      <div>
+        <Edit :text="item.text" :onOK="onSave" :onCancel="onCancelSave" />
+      </div>
+    </van-action-sheet>
+    <!-- edit end-->
+  </div>
 </template>
 
 <style scoped></style>

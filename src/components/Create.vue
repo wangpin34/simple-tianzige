@@ -39,6 +39,7 @@ const onTianZiGeClick = (char: string) => {
 </script>
 
 <template>
+  <div class="fixed top-0 left-0 w-full h-full">
   <van-nav-bar title="新建" :fixed="true">
     <template #left>
       <van-icon name="arrow-left" size="18" @click="onBack" />
@@ -107,6 +108,7 @@ const onTianZiGeClick = (char: string) => {
     </div>
   </van-action-sheet>
   <!-- bishun end-->
+  </div>
 </template>
 
 <style scoped></style>
