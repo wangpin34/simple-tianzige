@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { isChineseChar } from "../../utils/char";
 import useSettingsStore from "../../store/settings";
+import { isChineseChar } from "../../utils/char";
 import HanZi from "./HanZi.vue";
-import Symbol from './Symbol.vue'
 
 const settingsStore = useSettingsStore();
 const props = defineProps<{ text: string; cols?: number; selected?: number }>();
@@ -28,7 +27,8 @@ const textList = computed(() =>
         :char="text.char"
         @selected="() => $emit('handle-selected', text.char, text.id)"
       />
-      <Symbol v-else :char="text.char"/>
+      <div v-else class="aspect-square shrink relative outline-1 outline-slate-300 outline-dashed cursor-pointer" />
+      <!-- <Symbol v-else :char="text.char"/> -->
     </template>
   </div>
 </template>

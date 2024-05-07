@@ -1,16 +1,23 @@
-import { defineConfig } from 'vite'
-import UnoCSS from 'unocss/vite'
 import vue from '@vitejs/plugin-vue'
-import viteTsconfigPaths from "vite-tsconfig-paths"
+import UnoCSS from 'unocss/vite'
+import { defineConfig } from 'vite'
+import viteTsconfigPaths from 'vite-tsconfig-paths'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [vue({
-     template: {
+  server: {
+    port: parseInt(process.env.PORT || '3000'),
+  },
+  plugins: [
+    vue({
+      template: {
         compilerOptions: {
           // treat all tags with a dash as custom elements
-          isCustomElement: (tag) => ['qr-code'].includes(tag)
-        }
-      }
-  }), UnoCSS(), viteTsconfigPaths()],
+          isCustomElement: (tag) => ['qr-code'].includes(tag),
+        },
+      },
+    }),
+    UnoCSS(),
+    viteTsconfigPaths(),
+  ],
 })

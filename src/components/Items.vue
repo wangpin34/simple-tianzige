@@ -9,7 +9,7 @@ const router = useRouter();
 
 <template>
   <div class="fixed top-0 left-0 w-full h-full">
-    <van-nav-bar title="字帖" :fixed="true">
+    <van-nav-bar title="汉字" :fixed="true">
       <template #right>
         <van-icon name="plus" size="18" @click="router.push('/create')" />
       </template>

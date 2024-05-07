@@ -12,3 +12,11 @@ export function filterNotChineseChar(str: string) {
     .filter((s) => isChineseChar(s))
     .join('')
 }
+
+export function textToHanziList(text: string) {
+  return text.split('').map((s, index) => ({
+    id: index,
+    char: s,
+    isChinese: isChineseChar(s),
+  }))
+}
