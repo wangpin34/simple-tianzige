@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { onMounted, ref, watch } from "vue";
-import { useRouter } from "vue-router";
+import { onMounted, watch } from "vue";
+//import { useRouter } from "vue-router";
+
 import useGraphicsStore from './store/graphics';
 import useItemsStore from "./store/items";
 import type { Graphic, Item } from "./types/index";
@@ -8,21 +9,21 @@ import type { Graphic, Item } from "./types/index";
 const itemsStore = useItemsStore()
 const graphicsStore = useGraphicsStore()
 
-const activeTab = ref(0);
-const router = useRouter();
+// const activeTab = ref(0);
+// const router = useRouter();
 
-watch(activeTab, () => {
-  switch (activeTab.value) {
-    case 0:
-      router.push("/");
-      break;
-    case 1:
-      router.push("/settings");
-      break;
-    default:
-      console.log(`unknown tab(${activeTab.value}) activated`);
-  }
-});
+// watch(activeTab, () => {
+//   switch (activeTab.value) {
+//     case 0:
+//       router.push("/");
+//       break;
+//     case 1:
+//       router.push("/settings");
+//       break;
+//     default:
+//       console.log(`unknown tab(${activeTab.value}) activated`);
+//   }
+// });
 
 onMounted(() => {
   const cachedItemsVal = localStorage.getItem("items");
@@ -65,6 +66,8 @@ watch(
         <component :is="Component" :key="route.path" />
       </transition>
     </router-view>
+
+   
   </div>
 </template>
 

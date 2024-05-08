@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { showToast, showConfirmDialog } from "vant";
+import { showConfirmDialog, showToast } from "vant";
 import { computed, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import useItemsStore from "../store/items";
-import useSettingsStore from "../store/settings";
-import { savePNG } from "../utils/image";
-import BiShun from "./BiShun.vue";
-import Edit from "./Edit.vue";
-import TianZiGe from "./TianZiGe/index.vue";
+import BiShun from "./components/BiShun.vue";
+import Edit from "./components/Edit.vue";
+import TianZiGe from "./components/TianZiGe/index.vue";
+import useItemsStore from "./store/items";
+import useSettingsStore from "./store/settings";
+import { savePNG } from "./utils/image";
 
 const itemsStore = useItemsStore();
 const route = useRoute();
@@ -67,7 +67,7 @@ const handleRemove = () => {
   })
     .then(() => {
       onRemove();
-      router.push("/");
+      router.push("/items");
     })
     .catch(() => {
       // do nothing on cancel
@@ -122,11 +122,12 @@ const saveQrCodeImage = async () => {
   }
   showQr.value = false;
 };
+const title = computed(() => item.value?.text ?? "");
 </script>
 
 <template>
   <div class="fixed top-0 left-0 w-full h-full">
-    <van-nav-bar :fixed="true">
+    <van-nav-bar :fixed="true" :title="title">
       <template #left>
         <van-icon name="arrow-left" size="18" @click="onBack" />
       </template>
@@ -227,3 +228,4 @@ const saveQrCodeImage = async () => {
 </template>
 
 <style scoped></style>
+./store/items./store/settings./utils/image

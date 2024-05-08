@@ -27,9 +27,10 @@ export default defineConfig({
       workbox: {
         globPatterns: ['**/*'], // cache all files
         skipWaiting: true, // auto update service worker
+        maximumFileSizeToCacheInBytes: 50 * 1024 * 1024, // 50 MB
       },
       devOptions: {
-        enabled: true,
+        enabled: false,
       },
       manifest: {
         name: '田字格',

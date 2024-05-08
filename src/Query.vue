@@ -1,35 +1,26 @@
 <script setup lang="ts">
+import { nanoid } from 'nanoid'
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
-//import useItemsStore from '../store/items'
-import useSettingsStore from '../store/settings'
-import { textToHanziList } from '../utils/char'
-import BiShun from './BiShun.vue'
-import HanZiGrid from './TianZiGe/HanZiGrid.vue'
-//const itemsStore = useItemsStore()
-const settingsStore = useSettingsStore()
-const size = computed(() => settingsStore.size)
+import Footer from './components/Footer.vue'
+import HanZiGrid from './components/TianZiGe/HanZiGrid.vue'
+import useItemsStore from './store/items'
+import { textToHanziList } from './utils/char'
+import { textToColor } from './utils/text'
+const itemsStore = useItemsStore()
 const router = useRouter()
 const text = ref<string>('')
 const hanziList = computed(() => textToHanziList(text.value))
-// const onSave = () => {
-//   const id = nanoid()
-//   const item = {
-//     id,
-//     text: text.value,
-//     color: textToColor(text.value),
-//   }
-//   itemsStore.add(item)
-//   router.push('/items/' + id)
-// }
-
-const onBack = () => {
-  router.push('/')
+const onSave = () => {
+  const id = nanoid()
+  const item = {
+    id,
+    text: text.value,
+    color: textToColor(text.value),
+  }
+  itemsStore.add(item)
+  router.push('/items/' + id)
 }
-
-const showBinShun = ref(false)
-const showSettings = ref(false)
-const theChar = ref<string>()
 
 const dummy = ref<HTMLElement>()
 
@@ -40,10 +31,8 @@ const handleIntersection: IntersectionObserverCallback = (
   _: IntersectionObserver
 ) => {
   if (entries[0].isIntersecting) {
-    console.log(`${entries[0].isIntersecting}`)
     sticked.value = false
   } else {
-    console.log(`${entries[0].isIntersecting}`)
     sticked.value = true
   }
 }
@@ -61,9 +50,12 @@ onMounted(() => {
 
 <template>
   <div class="fixed top-0 left-0 w-full h-full max-h-full overflow-auto">
-    <van-nav-bar>
-      <template #left>
+    <van-nav-bar title="查询汉字">
+      <!-- <template #left>
         <van-icon name="cross" size="18" @click="onBack" />
+      </template> -->
+      <template #right>
+        <van-button @click="onSave">保存为字帖</van-button>
       </template>
     </van-nav-bar>
     <div class="relative">
@@ -103,27 +95,11 @@ onMounted(() => {
           <!-- <div v-else class="w-[40px] aspect-square shrink relative outline-1 outline-slate-300 outline-dashed cursor-pointer" /> -->
         </template>
       </div>
-      <!-- <van-row class="mt-4 px-4 flex justify-end">
-        <van-button
-          icon="plus"
-          type="default"
-          plain
-          size="small"
-          @click="onSave"
-        ></van-button>
-      </van-row> -->
     </div>
 
-    <van-action-bar class="justify-end">
-      <van-action-bar-icon
-        icon="setting-o"
-        text="设置"
-        @click="showSettings = true"
-      />
-    </van-action-bar>
 
     <!-- settings start-->
-    <van-action-sheet v-model:show="showSettings">
+    <!-- <van-action-sheet v-model:show="showSettings">
       <div class="p-8 flex flex-col justify-start">
         <div class="py-4 flex items-center">
           <van-icon name="/icons/font.svg" size="14" class="pr-4" />
@@ -137,17 +113,18 @@ onMounted(() => {
           <van-icon name="/icons/font.svg" size="20" class="pl-4" />
         </div>
       </div>
-    </van-action-sheet>
+    </van-action-sheet> -->
     <!-- settings end-->
 
     <!-- bishun start-->
-    <van-action-sheet v-model:show="showBinShun">
+    <!-- <van-action-sheet v-model:show="showBinShun">
       <div class="p-8 flex flex-col justify-center">
         <BiShun v-if="!!theChar" :char="theChar" />
       </div>
-    </van-action-sheet>
+    </van-action-sheet> -->
     <!-- bishun end-->
   </div>
+  <Footer />
 </template>
 
 <style scoped>

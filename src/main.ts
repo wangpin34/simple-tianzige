@@ -1,7 +1,4 @@
 // main.ts
-import Create from 'components/Create.vue'
-import Item from 'components/Item.vue'
-import Items from 'components/Items.vue'
 import Share from 'components/Share.vue'
 import { createPinia } from 'pinia'
 import {
@@ -30,18 +27,26 @@ import 'vant/lib/index.css'
 import 'virtual:uno.css'
 import { createApp } from 'vue'
 import { createRouter, createWebHashHistory } from 'vue-router'
+import About from './About.vue'
 import App from './App.vue'
+import Item from './Item.vue'
+import Items from './Items.vue'
+import Query from './Query.vue'
+import Settings from './Settings.vue'
 import './style.css'
 
 const routes = [
-  { path: '/', component: Items, meta: { transition: 'slide-right' } },
+  { path: '/query', component: Query },
+  { path: '/items', component: Items },
   { path: '/items/:id', component: Item },
-  { path: '/create', component: Create, meta: { transition: 'slide-left' } },
+  { path: '/settings', component: Settings },
+  { path: '/about', component: About },
   {
     path: '/share',
     component: Share,
     meta: { transition: 'slide-left' },
   },
+  { path: '/:pathMatch(.*)*', name: 'not-found', component: Query },
 ]
 const router = createRouter({
   // 4. Provide the history implementation to use. We are using the hash history for simplicity here.
@@ -60,7 +65,12 @@ router.afterEach((to, from) => {
       const fromDepth = from.path.split('/').length
       // from parent -> child: slide left
       // from child -> parent: slide right
-      to.meta.transition = toDepth < fromDepth ? 'slide-right' : 'slide-left'
+      if (to.path.includes(from.path)) {
+        to.meta.transition = 'slide-left'
+      } else {
+        to.meta.transition = 'slide-right'
+      }
+      // to.meta.transition = toDepth < fromDepth ? 'slide-right' : 'slide-left'
       console.debug(
         `to.path=${to.path}, toDepth=${toDepth}, from.path=${from.path}, fromDepth=${fromDepth}`,
         to.path,
@@ -69,8 +79,8 @@ router.afterEach((to, from) => {
     } else if (/\/items\/[\d\D]+/.test(to.path) && /\/share/.test(from.path)) {
       to.meta.transition = 'slide-left'
     } else {
-      console.warn(
-        `unknown transition: to.path=${to.path}, from.path=${from.path}`
+      console.info(
+        `no transition used: to.path=${to.path}, from.path=${from.path}`
       )
     }
   }
