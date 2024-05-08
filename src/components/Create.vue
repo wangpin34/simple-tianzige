@@ -96,13 +96,13 @@ onMounted(() => {
           </template>
         </van-field>
       </div>
-      <van-row class="mt-4 px-4 flex flex-col gap-8" v-if="hanziList.length">
+      <div class="mt-4 px-4 flex flex-col gap-8" v-if="hanziList.length">
         <template v-for="text in hanziList">
           <HanZiGrid v-if="text.isChinese" :hanzi="text.char" />
           <div v-else-if="text.char == '\n'" class="w-full"></div>
           <!-- <div v-else class="w-[40px] aspect-square shrink relative outline-1 outline-slate-300 outline-dashed cursor-pointer" /> -->
         </template>
-      </van-row>
+      </div>
       <!-- <van-row class="mt-4 px-4 flex justify-end">
         <van-button
           icon="plus"
