@@ -56,7 +56,19 @@ self.addEventListener('fetch', (event) => {
 
 self.addEventListener('install', (event) => {
   console.log('Service worker installed')
+  event.waitUntil(
+    caches.open('v1').then((cache) => {
+      // Perform cache actions...
+      return cache.addAll(['/', '/fallback.html'])
+    })
+  )
+  self.skipWaiting()
 })
 self.addEventListener('activate', (event) => {
   console.log('Service worker activated')
+  event
+    .waitUntil
+    // Perform activation actions...
+    ()
+  self.clients.claim()
 })
