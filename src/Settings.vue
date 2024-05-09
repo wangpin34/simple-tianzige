@@ -7,7 +7,9 @@ const size = ref(settingsStore.size)
 </script>
 
 <template>
-  <div class="p-8 flex flex-col justify-start">
+  <van-nav-bar title="设置" :fixed="true">
+    </van-nav-bar>
+  <div class="m-content p-8 flex flex-col justify-start">
     <div class="py-4 flex items-center">
       <van-icon name="/icons/font.svg" size="14" class="pr-4" />
       <van-slider

@@ -1,5 +1,8 @@
+<script setup lang="ts">
+  import Footer from './components/Footer.vue';
+</script>
 <template>
-  <div class="fixed top-0 left-0 w-full h-full">
+  <div class="m-content fixed top-0 left-0 w-full h-full">
     <van-nav-bar title="关于" :fixed="true">
     </van-nav-bar>
     <div id="home" class="m-content p-8 grow max-h-full flex flex-col gap-2">
