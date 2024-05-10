@@ -126,8 +126,7 @@ const title = computed(() => item.value?.text ?? "");
 </script>
 
 <template>
-  <div class="fixed top-0 left-0 w-full h-full">
-    <van-nav-bar :fixed="true" :title="title">
+  <van-nav-bar :fixed="true" :title="title">
       <template #left>
         <van-icon name="arrow-left" size="18" @click="onBack" />
       </template>
@@ -137,6 +136,7 @@ const title = computed(() => item.value?.text ?? "");
         </div>
       </template>
     </van-nav-bar>
+    
 
     <div id="home" class="m-content p-8 grow flex flex-col gap-2">
       <div class="flex-grow" id="tianzige" v-if="item">
@@ -224,8 +224,6 @@ const title = computed(() => item.value?.text ?? "");
       </div>
     </van-action-sheet>
     <!-- edit end-->
-  </div>
 </template>
 
 <style scoped></style>
-./store/items./store/settings./utils/image

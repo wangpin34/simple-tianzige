@@ -9,7 +9,7 @@ const size = ref(settingsStore.size)
 <template>
   <van-nav-bar title="设置" :fixed="true">
     </van-nav-bar>
-  <div class="m-content p-8 flex flex-col justify-start">
+  <main class="m-content p-8 flex flex-col justify-start">
     <div class="py-4 flex items-center">
       <van-icon name="/icons/font.svg" size="14" class="pr-4" />
       <van-slider
@@ -21,6 +21,6 @@ const size = ref(settingsStore.size)
       />
       <van-icon name="/icons/font.svg" size="20" class="pl-4" />
     </div>
-  </div>
+  </main>
    <Footer />
 </template>

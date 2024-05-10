@@ -12,15 +12,15 @@ const onReplay = () => {
 }
 </script>
 <template>
-  <div class="w-full flex flex-col">
+  <div class="w-full box-border flex flex-col rounded-lg bg-white p-8">
     <div
       @click="onReplay"
-      class="relative w-[50%] flex items-baseline justify-start"
+      class="w-[180px] flex items-baseline justify-start"
     >
       <img
         :src="`/graphics-bishun/${charCode}.svg?timestamp=${timestamp}`"
         :alt="`${props.hanzi} 笔顺`"
-        class="aspect-square outline-1 outline-slate-300 outline-dashed"
+        class="max-h-full aspect-square outline-1 outline-slate-300 outline-dashed"
       />
       <van-icon
         name="replay"
@@ -30,7 +30,7 @@ const onReplay = () => {
     <div class="mt-4 flex flex-row gap-4 flex-wrap">
       <template v-if="graphic" v-for="step in graphic.strokes.length">
         <div
-          class="w-[60px] aspect-square shrink relative outline-1 outline-slate-300 outline-dashed"
+          class="w-[125px] aspect-square shrink relative outline-1 outline-slate-300 outline-dashed"
         >
           <svg viewBox="0 0 1024 1024">
             <g

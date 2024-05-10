@@ -66,8 +66,6 @@ watch(
         <component :is="Component" :key="route.path" />
       </transition>
     </router-view>
-
-   
   </div>
 </template>
 
