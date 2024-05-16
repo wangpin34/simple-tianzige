@@ -42,7 +42,7 @@ const onTianZiGeClick = (char: string, index: number) => {
 };
 
 const onBack = () => {
-  router.push("/");
+  router.push("/items");
 };
 
 const onSave = (text: string) => {
