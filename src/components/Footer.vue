@@ -2,7 +2,8 @@
 </script>
 
 <template>
-  <van-action-bar safe-area-inset-bottom class="justify-around">
+
+  <van-action-bar safe-area-inset-bottom class="w-screen sm:max-w-[640px] left-1/2  justify-around" style="transform: translateX(-50%);">
     <RouterLink to="/query" class="van-action-bar-icon">
       <van-icon name="search" size="18" />
       <span class="text-xs"> 查询 </span>

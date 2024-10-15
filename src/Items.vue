@@ -8,7 +8,7 @@ const router = useRouter();
 </script>
 
 <template>
-   <van-nav-bar title="字帖" :fixed="true">
+   <van-nav-bar title="字帖" :fixed="true" class="w-screen sm:max-w-[640px] left-1/2 " style="transform: translateX(-50%);">
       <template #right>
         <van-icon name="plus" size="18" @click="router.push('/create')" />
       </template>

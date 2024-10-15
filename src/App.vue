@@ -60,7 +60,7 @@ watch(
 </script>
 
 <template>
-  <div class="flex flex-col h-screen bg-slate-50">
+  <div class="m-auto w-screen sm:max-w-[640px] flex flex-col h-screen bg-slate-50">
     <router-view v-slot="{ Component, route }">
       <transition :name="route.meta.transition as string || 'none'">
         <component :is="Component" :key="route.path" />

@@ -126,7 +126,7 @@ const title = computed(() => item.value?.text ?? "");
 </script>
 
 <template>
-  <van-nav-bar :fixed="true" :title="title">
+  <van-nav-bar :fixed="true" :title="title" class="w-screen sm:max-w-[640px] left-1/2" style="transform: translateX(-50%);">
       <template #left>
         <van-icon name="arrow-left" size="18" @click="onBack" />
       </template>
@@ -155,7 +155,7 @@ const title = computed(() => item.value?.text ?? "");
       </div>
     </div>
 
-    <van-action-bar class="justify-around" v-if="item">
+    <van-action-bar v-if="item" class="justify-around w-screen sm:max-w-[640px] left-1/2  justify-around" style="transform: translateX(-50%);">
       <van-action-bar-icon icon="delete-o" text="删除" @click="handleRemove" />
       <van-action-bar-icon
         icon="share-o"
@@ -194,9 +194,7 @@ const title = computed(() => item.value?.text ?? "");
 
     <!-- bishun start-->
     <van-action-sheet v-model:show="showBinShun">
-      <div class="p-8 flex flex-col justify-center">
-        <BiShun v-if="!!theChar" :char="theChar" />
-      </div>
+      <BiShun v-if="!!theChar" :char="theChar" />
     </van-action-sheet>
     <!-- bishun end-->
 
