@@ -32,47 +32,23 @@ export default defineConfig({
       devOptions: {
         enabled: false,
       },
+      includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
       manifest: {
-        name: '田字格',
+        name: '简单田字格',
         short_name: '田字格',
-        description: '田字格是一个适用于手机端的汉字笔顺应用',
-        theme_color: '#c03f3c',
+        description: '简单田字格是一个适用于手机端的汉字笔顺应用',
+        theme_color: '#FF5722',
         background_color: '#ffffff',
         start_url: '/',
         display: 'standalone',
         icons: [
           {
-            src: '/icon_x48.png',
-            type: 'image/png',
-            sizes: '48x48',
-          },
-          {
-            src: '/icon_x72.png',
-            type: 'image/png',
-            sizes: '72x72',
-          },
-          {
-            src: '/icon_x96.png',
-            type: 'image/png',
-            sizes: '96x96',
-          },
-          {
-            src: '/icon_x128.png',
-            type: 'image/png',
-            sizes: '128x128',
-          },
-          {
-            src: '/icon_x192.png',
+            src: '/icon-192-maskable.png',
             type: 'image/png',
             sizes: '192x192',
           },
           {
-            src: '/icon_x384.png',
-            type: 'image/png',
-            sizes: '384x384',
-          },
-          {
-            src: '/icon_x512.png',
+            src: '/icon-512-maskable.png',
             type: 'image/png',
             sizes: '512x512',
           },
